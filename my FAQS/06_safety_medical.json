@@ -1,0 +1,47 @@
+{
+  "company": "SpaceWing",
+  "category": "Safety & Medical",
+  "last_updated": "2025-03-03",
+  "faqs": [
+    {
+      "question": "How safe is space travel with SpaceWing?",
+      "answer": "SpaceWing maintains an exceptional safety record with over 50 successful missions and zero serious injuries. Our spacecraft undergo rigorous testing with triple-redundant systems. Each vehicle is inspected before every flight by our team of 200+ engineers. We exceed all FAA and NASA safety standards and conduct continuous safety improvements based on flight data."
+    },
+    {
+      "question": "What medical conditions disqualify someone from space travel?",
+      "answer": "Most healthy adults can travel to space. Conditions that may require additional evaluation include: uncontrolled heart disease, recent stroke or blood clot, uncontrolled epilepsy, severe respiratory conditions, pregnancy, recent major surgery, or certain psychiatric conditions. Many conditions are not automatic disqualifiers—our medical team evaluates each applicant individually."
+    },
+    {
+      "question": "What medical screening is required?",
+      "answer": "All travelers complete a comprehensive medical evaluation including: physical examination, cardiovascular stress test, vision and hearing tests, blood work, and psychological evaluation. Most evaluations are completed within 1-2 days at our facilities or through approved partner clinics worldwide. Results are confidential and reviewed by our flight surgeons."
+    },
+    {
+      "question": "Is there a doctor on board during flights?",
+      "answer": "All orbital and lunar missions include a trained medical professional as part of the crew. Suborbital flights have medical-trained flight attendants and emergency protocols with real-time links to our medical team on the ground. Our Orbital Station has a dedicated medical bay and telemedicine capabilities."
+    },
+    {
+      "question": "What happens in a medical emergency during flight?",
+      "answer": "Our spacecraft are equipped with advanced medical equipment including automated defibrillators, emergency medications, and diagnostic tools. Flight crew receive extensive medical training. For serious emergencies, we can initiate emergency return protocols, bringing the spacecraft back to Earth within hours. We also have agreements with ground hospitals worldwide."
+    },
+    {
+      "question": "Can I bring medication on the flight?",
+      "answer": "Yes, prescription medications are allowed with advance notification during your medical screening. Our medical team will advise on proper storage and administration in space. Some medications may require special packaging or timing adjustments for zero-gravity. We carry backup supplies of common medications on all flights."
+    },
+    {
+      "question": "Are there any long-term health effects of space travel?",
+      "answer": "Short-duration space travel (under 2 weeks) has minimal long-term health effects. Some travelers experience temporary bone density reduction and muscle atrophy, reversed quickly upon return to Earth. Our medical team monitors all travelers and provides post-flight wellness programs. Extensive research shows no significant long-term health issues from brief space exposure."
+    },
+    {
+      "question": "What safety equipment is provided?",
+      "answer": "Each traveler receives: a custom-fitted pressure suit capable of maintaining life in vacuum conditions, personal emergency oxygen supply, survival kit, and locator beacon. Cabin safety features include multiple emergency exits, fire suppression systems, and ejection capabilities on certain craft. Safety briefings are comprehensive and mandatory."
+    },
+    {
+      "question": "How do you handle radiation exposure?",
+      "answer": "SpaceWing monitors solar activity continuously and adjusts mission timing to avoid radiation events. Our spacecraft incorporate radiation shielding, and we provide real-time dosimetry for each traveler. Typical suborbital and orbital flights result in less radiation exposure than a chest X-ray. Lunar missions receive slightly higher exposure but remain well within safe limits."
+    },
+    {
+      "question": "Is travel insurance required?",
+      "answer": "While not mandatory, we strongly recommend comprehensive space travel insurance. SpaceWing partners with SpaceSure Insurance, the only provider offering true space travel coverage including: medical emergencies in space, emergency evacuation, trip cancellation, and personal accident coverage. Premiums start at just 5% of your booking cost."
+    }
+  ]
+}

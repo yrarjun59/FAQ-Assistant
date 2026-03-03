@@ -1,0 +1,47 @@
+{
+  "company": "SpaceWing",
+  "category": "Legal & Documentation",
+  "last_updated": "2025-03-03",
+  "faqs": [
+    {
+      "question": "What documents do I need to provide?",
+      "answer": "All travelers must provide: valid government-issued photo ID (passport for international travelers), completed medical questionnaire, emergency contact information, and signed liability waiver. Non-US citizens require a valid passport and may need a US visa depending on nationality. Additional documentation may be required for specific missions. All documents are submitted through our secure online portal."
+    },
+    {
+      "question": "Do I need a visa to travel with SpaceWing?",
+      "answer": "US citizens do not need additional visas. Non-US citizens may need a US visa to travel to our launch sites and complete training. SpaceWing provides official invitation letters to support your visa application. We recommend applying at least 90 days before your scheduled training. Our International Services team can provide guidance on requirements for your nationality."
+    },
+    {
+      "question": "What liability waivers must I sign?",
+      "answer": "All travelers sign our Acknowledgment of Risks and Liability Waiver, which outlines the inherent risks of space travel. This is standard for all commercial space activities. The waiver includes emergency medical treatment authorization and media release for promotional materials (optional). Our legal team is available to explain any provisions before signing."
+    },
+    {
+      "question": "Are there age restrictions on legal documents?",
+      "answer": "Travelers 18 and older sign all documents independently. Travelers aged 12-17 require parental/guardian consent forms signed by all legal guardians. For travelers under 18, guardians must also sign the liability waiver and medical authorization. No travelers under 12 are permitted on space flights."
+    },
+    {
+      "question": "What happens to my booking if I pass away before my flight?",
+      "answer": "Your booking is transferable to your estate or designated beneficiary. They may take your place on the mission (subject to meeting requirements) or receive a refund according to our cancellation policy. We recommend including your SpaceWing booking in your estate planning and designating a beneficiary during the booking process."
+    },
+    {
+      "question": "Is my personal information secure?",
+      "answer": "SpaceWing takes data security extremely seriously. All personal information is encrypted and stored in secure, access-controlled systems. We comply with GDPR, CCPA, and international privacy regulations. Your data is never sold and is only shared with necessary partners (medical providers, insurers) with your consent. You may request data deletion at any time."
+    },
+    {
+      "question": "What legal jurisdiction applies to space travel?",
+      "answer": "Space travel is governed by the Outer Space Treaty of 1967 and US commercial space law. During your flight, you remain under the jurisdiction of the spacecraft's registration country (United States). Any legal matters are resolved according to US law and the laws of Florida, where SpaceWing is headquartered. Our terms and conditions provide full details."
+    },
+    {
+      "question": "Do I need special insurance?",
+      "answer": "While not mandatory, we strongly recommend space travel insurance. Standard travel insurance does not cover space activities. SpaceWing partners with SpaceSure Insurance to offer comprehensive coverage including medical emergencies, trip cancellation, and personal accident protection. Premiums start at 5% of your booking cost. Your existing health insurance may not cover space-related incidents."
+    },
+    {
+      "question": "Can I include a space flight in my will?",
+      "answer": "Yes! SpaceWing bookings are transferable assets. You can designate a beneficiary for your booking in your will. The beneficiary can take your place on the mission or receive the booking value according to our transfer policies. Contact our Legal Services team for guidance on including space travel in estate planning."
+    },
+    {
+      "question": "What if I have a criminal record?",
+      "answer": "Having a criminal record does not automatically disqualify you from space travel. Each case is evaluated individually considering factors like the nature of the offense, time elapsed, and rehabilitation. Certain serious offenses may require additional review. All background checks are conducted confidentially and in compliance with applicable laws. Contact us for a confidential evaluation."
+    }
+  ]
+}
