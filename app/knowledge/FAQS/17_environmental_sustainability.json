@@ -1,0 +1,47 @@
+{
+  "company": "SpaceWing",
+  "category": "Environmental & Sustainability",
+  "last_updated": "2025-03-03",
+  "faqs": [
+    {
+      "question": "How does SpaceWing address environmental concerns?",
+      "answer": "SpaceWing is committed to sustainable space access. Our initiatives include: carbon-neutral operations through verified offsets, development of green propellants, spacecraft recycling program, partnership with environmental research organizations, and Earth observation missions supporting climate science. We've committed to net-zero emissions by 2030."
+    },
+    {
+      "question": "What is the environmental impact of space travel?",
+      "answer": "A suborbital flight produces approximately 50-100 tons of CO2, equivalent to a long-haul flight for 50 passengers. SpaceWing offsets 200% of emissions for every flight, making us carbon-negative. We're also developing sustainable aviation fuels and exploring electric propulsion systems for future vehicles."
+    },
+    {
+      "question": "Does SpaceWing contribute to space debris?",
+      "answer": "SpaceWing has a zero-debris policy. All our missions are designed for complete debris avoidance: upper stages deorbit immediately, spacecraft are fully reusable, and we actively participate in debris monitoring. We're founding members of the Space Sustainability Consortium and contribute to active debris removal research."
+    },
+    {
+      "question": "How do you offset carbon emissions?",
+      "answer": "SpaceWing invests in verified carbon offset projects including: reforestation programs, renewable energy development, methane capture from landfills, and direct air capture technology. We exceed industry standards by offsetting 200% of emissions. Travelers receive a carbon offset certificate showing the exact environmental impact of their flight and how it was neutralized."
+    },
+    {
+      "question": "Can travelers participate in environmental research?",
+      "answer": "Yes! Every SpaceWing mission includes Earth observation opportunities. Travelers can: photograph environmental phenomena, participate in climate monitoring experiments, collect data for scientific research, and observe Earth's changing systems from orbit. Our partnership with NASA's Earth Science Division ensures data contributes to real research."
+    },
+    {
+      "question": "What is the SpaceWing Green Program?",
+      "answer": "Our Green Program offers eco-conscious travelers: biodegradable packaging and materials on flights, plant-based menu options, digital documentation (no paper), and a 'Leave No Trace' commitment in space. Green Program participants receive special recognition and a portion of their fare supports environmental research."
+    },
+    {
+      "question": "How are spacecraft recycled?",
+      "answer": "SpaceWing's spacecraft are designed for 100+ flights each. At end of life, vehicles are: stripped of reusable components (engines, electronics, life support), materials are recycled (aluminum, titanium, composites), and nothing goes to landfill. Our recycling program recovers over 95% of spacecraft materials for reuse or recycling."
+    },
+    {
+      "question": "What sustainable propulsion is SpaceWing developing?",
+      "answer": "We're investing in next-generation propulsion including: methane-based fuels (lower carbon footprint), hydrogen-oxygen systems (zero carbon emissions), hybrid electric propulsion for certain applications, and solar electric propulsion for orbital transfers. Our goal is fully sustainable propulsion by 2035."
+    },
+    {
+      "question": "How does space tourism benefit Earth?",
+      "answer": "Space tourism provides: unique perspective on Earth's fragility (the Overview Effect), advances in technology that benefit Earth applications, medical research applicable to terrestrial medicine, Earth observation data for environmental monitoring, and inspiration for the next generation of scientists and explorers."
+    },
+    {
+      "question": "Can I donate to environmental causes through SpaceWing?",
+      "answer": "Yes! SpaceWing partners with leading environmental organizations including: The Ocean Cleanup, World Wildlife Fund, and Carbon Fund. Travelers can donate a portion of their booking to these organizations, and we match all donations up to $1,000. Since our founding, SpaceWing and our travelers have contributed over $5 million to environmental causes."
+    }
+  ]
+}
