@@ -1,13 +1,8 @@
 from langchain_core.prompts import PromptTemplate
-from langchain_core.prompts import ChatPromptTemplate
-
-FAQ_SYSTEM_PROMPT = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful assistant. Use the following context to answer the question.\n\nContext:\n{context}"),
-    ("human", "{input}")
-])
-
+from langchain_core.prompts import ChatPromptTemplate , MessagesPlaceholder
 # --- 1. SECURITY ROUTER PROMPT ---
 # Strictly for classification. We keep this rigorous to ensure safety.
+# --- 1. SECURITY ROUTER PROMPT (Unchanged Logic) ---
 ROUTER_PROMPT = PromptTemplate(
     template="""
 You are a strict security classifier. Categorize the user's input into exactly one of these categories based on INTENT:
@@ -28,9 +23,9 @@ Category:""",
     input_variables=["question"]
 )
 
-# --- 2. HUMAN-LIKE RESPONSE PROMPTS ---
 
-# For SAFE questions (RAG) - Friendly and Professional
+# --- 2. FAQ ANSWER PROMPT (Concise & Fun) ---
+# We add specific formatting rules: Bullet points, Emojis, Short sentences.
 FAQ_SYSTEM_PROMPT = ChatPromptTemplate.from_messages([
     ("system", "You are a friendly, concise HR assistant. "
                "Answer based ONLY on the context below. "
@@ -38,12 +33,15 @@ FAQ_SYSTEM_PROMPT = ChatPromptTemplate.from_messages([
                "Use bullet points for clarity. "
                "Keep answers under 3 sentences unless listing items. "
                "Be warm and conversational."),
-    ("human", "Context:\n{context}\n\nQuestion:\n{input}")
-
+    MessagesPlaceholder(variable_name="chat_history"),
+    ("human", "Context:\n{context}\n\nQuestion: {input}")
 ])
 
-# For HR/Sensitive topics - Empathetic Redirect
-# We don't hardcode the response; we ask the LLM to generate an empathetic refusal.
+
+
+# --- 3. DYNAMIC RESPONSE PROMPTS (Whimsical & Fun) ---
+
+# For HR: Polite but clear boundary
 HR_RESPONSE_PROMPT = PromptTemplate(
     template="""
 You are a witty HR assistant. The user asked a sensitive question about: '{question}'.
@@ -57,7 +55,7 @@ Response:""",
     input_variables=["question"]
 )
 
-# For Security Threats - Chill Pill
+# For Security Threats: The "Chill Pill" Persona
 INJECTION_RESPONSE_PROMPT = PromptTemplate(
     template="""
 You are a 'Chill' Security Guard. A user tried to hack you with: '{question}'.
