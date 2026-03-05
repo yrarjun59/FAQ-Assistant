@@ -10,76 +10,76 @@ from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.memory import ConversationBufferWindowMemory
 
 from prompts import WHIMSICAL_PROMPT
-from security import classify_input
 
 # config
 DB_PATH = "./chroma_db"
 OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 ACTIVE_MODEL = "llama3.2:1b"
 
-USE_RAG = True
 
-# initialize 
-def initialize_rag():
-    llm = OllamaLLM(model=ACTIVE_MODEL, base_url=OLLAMA_URL)
-
-    if USE_RAG:
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-        vector_store = Chroma(persist_directory=DB_PATH, embedding_function=embeddings)
+class Stella:
+    """Encapsulates RAG initialization and query processing."""
+    def __init__(self):
+        self.rag_chain = None
+        self._initialize_rag()
     
-        retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+    def _initialize_rag(self):
+        """Initializes LLM, embeddings, vector store, and RAG chain."""
 
-        combine_chain = create_stuff_documents_chain(llm, WHIMSICAL_PROMPT)
+        if self.rag_chain is None:
+            print("🔧 Initializing RAG chain...")
+            llm = OllamaLLM(model=ACTIVE_MODEL, base_url=OLLAMA_URL)
+            embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+            vector_store = Chroma(persist_directory=DB_PATH,embedding_function=embeddings)
+            retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+            combine_chain = create_stuff_documents_chain(llm, WHIMSICAL_PROMPT)
+            self.rag_chain = create_retrieval_chain(retriever, combine_chain)
+            print("✅ RAG chain ready!")
 
-        rag_chain = create_retrieval_chain(retriever, combine_chain)
-     
-        return rag_chain
-    else:
-        return WHIMSICAL_PROMPT | llm
+    def ask(self, query: str) -> dict:
+        """Processes a query using the initialized RAG chain."""
+        if not query.strip():
+            return {"error": "Query cannot be empty."}
+        try:
+            start_time = time.time()
 
-def main():
-    print("--- ⭐ Stella: The Witty Space Assistant ---")
-    print("🔧 Initializing systems...")
+            response = self.rag_chain.invoke({"input": query, "context": ""})
+            answer = response['answer']
+            context_docs = response.get("context", [])
+            context_serialized = [{"content": d.page_content, "metadata": d.metadata} for d in context_docs]
+            sources = [d.metadata.get("source") for d in context_docs if d.metadata.get("source")]
 
-    rag_chain = initialize_rag() 
+            return {
+                "answer": answer,
+                "sources": sources,
+                "context_docs": context_serialized,
+                "time_taken": round(time.time() - start_time, 2)
+            }
 
-    print("✅ Chat is live! (Type 'exit' to return to Earth)\n")
+        except Exception as e:
+            return {"error": str(e)}
+        
 
+    def run_cli(self):
+        """Optional CLI interface for local testing."""
+        print("--- ⭐ Stella: The Witty Space Assistant ---\n")
+        print("✅ Chat is live! (Type 'exit' to quit)\n")
+        while True:
+            user_query = input("👨‍🚀 You: ").strip()
+            if user_query.lower() == "exit":
+                print("👋 Goodbye!")
+                break
 
-    while True:
-        user_query = input("👨‍🚀 You: ").strip()
-        if user_query.lower() == "exit":
-            print("👋 Returning to orbit. Goodbye!")
-            break
+            result = self.ask(user_query)
 
-        start_time = time.time()
-
-        if USE_RAG:
-            response = rag_chain.invoke({
-            "input": user_query,
-            "context": ""
-        })
-            # print(response)
-
-        else:
-            response = rag_chain.invoke(user_query)
-            print(response)
+            if "error" in result:
+                print(f"❌ Error: {result['error']}")
+            else:
+                print(f"🤖 Stella: {result['answer']}")
+                print(f"Time: {result['time_taken']:.2f}s")
+                print([f"📚 Source: {src}" for src in result.get("sources", [])])
 
         
-        print(f"🤖 Stella: {response['answer']}")
-
-        # print(f"Time: {time.time() - start_time:.2f}s\n")
-
-        sources = [
-            d.metadata.get("source") 
-            for d in response.get("context", []) 
-            if d.metadata.get("source")
-        ]
-
-        print(f"Time: {time.time() - start_time:.2f}s\n")
-        if sources:
-            print(f"📚 Source: {', '.join(sources)}")
-
-
 if __name__ == "__main__":
-    main()
+    assistant = Stella()
+    assistant.run_cli()
