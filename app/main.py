@@ -1,144 +1,85 @@
 import os
-import sys
 import time
-import requests
+from urllib import response
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaLLM
 
-from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
-from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_classic.chains import create_retrieval_chain
+from langchain_classic.memory import ConversationBufferWindowMemory
 
-# Import our Modules
-from prompts import FAQ_SYSTEM_PROMPT
-from security import SecurityFirewall
+from prompts import WHIMSICAL_PROMPT
+from security import classify_input
 
-# --- CONFIGURATION ---
-DB_PATH = "./db"
+# config
+DB_PATH = "./chroma_db"
 OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
-# MODEL_NAME = "llama3.1"
-MODEL_NAME = "llama3.2:1b"
+ACTIVE_MODEL = "llama3.2:1b"
 
+USE_RAG = True
 
-print("--- Initializing Secure System ---")
+# initialize 
+def initialize_rag():
+    llm = OllamaLLM(model=ACTIVE_MODEL, base_url=OLLAMA_URL)
 
-# 0. System Check
-try:
-    requests.get(f"{OLLAMA_URL}/api/tags", timeout=5).raise_for_status()
-    print("✅ Ollama connection successful.")
-except Exception as e:
-    print(f"❌ CRITICAL: Cannot connect to Ollama. Error: {e}")
-    sys.exit(1)
-
-try:
-    # 1. Setup Components
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    vector_store = Chroma(persist_directory=DB_PATH, embedding_function=embeddings)
+    if USE_RAG:
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        vector_store = Chroma(persist_directory=DB_PATH, embedding_function=embeddings)
     
-    # Initialize LLMs
-    # llm_main = OllamaLLM(model=MODEL_NAME, base_url=OLLAMA_URL)
+        retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 
-    llm_main = OllamaLLM(
-        model=MODEL_NAME, 
-        base_url=OLLAMA_URL,
-        num_ctx=8192, 
-        # Note: Ollama usually keeps alive by default, but setting param ensures it
-    )
-    
-    # Initialize Firewall (Passing the smart LLM for refusals)
-    # firewall = SecurityFirewall(MODEL_NAME, OLLAMA_URL)
+        combine_chain = create_stuff_documents_chain(llm, WHIMSICAL_PROMPT)
 
-    llm_fast = OllamaLLM(model="llama3.2:1b", base_url=OLLAMA_URL) 
-    
-    # Main Answers need the big brain.
-    llm_main = OllamaLLM(model="llama3.1", base_url=OLLAMA_URL)
+        rag_chain = create_retrieval_chain(retriever, combine_chain)
+     
+        return rag_chain
+    else:
+        return WHIMSICAL_PROMPT | llm
 
-    firewall = SecurityFirewall(OLLAMA_URL, llm_fast)
+def main():
+    print("--- ⭐ Stella: The Witty Space Assistant ---")
+    print("🔧 Initializing systems...")
 
-    # 1. setup memory (short-term)
-    chat_history = ChatMessageHistory()
+    rag_chain = initialize_rag() 
 
-    # 2. Build RAG Chain
-    # Step A: Create the chain that combines documents (inserts context into prompt)
-    combine_docs_chain = create_stuff_documents_chain(
-        llm=llm_main, 
-        prompt=FAQ_SYSTEM_PROMPT
-    )
-
-    # Step B: Create the full Retrieval Chain (Search -> Combine -> Answer)
-    rag_chain = create_retrieval_chain(
-        retriever=vector_store.as_retriever(search_kwargs={"k": 3}),
-        combine_docs_chain=combine_docs_chain
-    )
-
-    # We run a tiny dummy query to force Ollama to load the model into VRAM now
-    # so the user doesn't wait 12 seconds on their first real question.
-    print("🔥 Warming up GPU (Loading Model)...")
-    start_warmup = time.time()
-    llm_main.invoke("Hi") 
-    print(f"🔥 Warmup Complete in {time.time() - start_warmup:.2f}s. System Ready.")
+    print("✅ Chat is live! (Type 'exit' to return to Earth)\n")
 
 
-    print("\n✅ System Ready. Talk to me! (Type 'exit' to quit)")
-
-    # 3. Main Loop
     while True:
-        try:
-            user_query = input("\nYou: ")
+        user_query = input("👨‍🚀 You: ").strip()
+        if user_query.lower() == "exit":
+            print("👋 Returning to orbit. Goodbye!")
+            break
 
-            if user_query.lower() == "clear":    
-                chat_history.clear()
-                print("🧠 Memory wiped clean.")
-                continue
-            
-            if user_query.lower().strip() == "exit":
-                break
+        start_time = time.time()
 
-            # --- START TIMER ---
-            start_time = time.time()
-            # --- STEP A: SECURITY & ROUTING ---
-            status, message = firewall.process(user_query)
+        if USE_RAG:
+            response = rag_chain.invoke({
+            "input": user_query,
+            "context": ""
+        })
+            # print(response)
 
-            # --- STEP B: EXECUTION ---
-            
-            # Case 1: Blocked (HR/Injection/Unknown)
-            if status == "BLOCKED":
-                print(f"AI: {message}")
-                # Calculate time for blocked responses too
-                chat_history.add_user_message(user_query)
-                chat_history.add_ai_message(message)
-                end_time = time.time()
-                print(f"⏱️  Response Time: {end_time - start_time:.2f} seconds")
-                continue
+        else:
+            response = rag_chain.invoke(user_query)
+            print(response)
 
-            # Case 2: Safe (RAG)
-            if status == "SAFE":
-                # --- PERFORMANCE FIX 3: TRUNCATE MEMORY ---
-                # Only keep the last 3 interactions (3 User + 3 AI messages)
-                # This prevents the prompt from getting too big and slow
+        
+        print(f"🤖 Stella: {response['answer']}")
 
-                while len(chat_history.messages) > 6:
-                    chat_history.messages.pop(0)
+        # print(f"Time: {time.time() - start_time:.2f}s\n")
 
-                # Invoke RAG chain
-                response = rag_chain.invoke({
-                    "input": user_query,
-                    "chat_history": chat_history.messages
-                })
-                answer = response.get('answer', 'I am unable to find an answer right now.')
-                print(f"AI: {answer}")
+        sources = [
+            d.metadata.get("source") 
+            for d in response.get("context", []) 
+            if d.metadata.get("source")
+        ]
 
-                # Save to Memory
-                chat_history.add_user_message(user_query)
-                chat_history.add_ai_message(answer)
+        print(f"Time: {time.time() - start_time:.2f}s\n")
+        if sources:
+            print(f"📚 Source: {', '.join(sources)}")
 
-                # --- STOP TIMER ---
-                end_time = time.time()
-                print(f"⏱️  Response Time: {end_time - start_time:.2f} seconds")
 
-        except Exception as e:
-            print(f"⚠️ Runtime Error: {e}")
-
-except Exception as init_error:
-    print(f"❌ Initialization Failed: {init_error}")
+if __name__ == "__main__":
+    main()
