@@ -28,7 +28,7 @@ services:
       - ./app:/app
     environment:
       - OLLAMA_BASE_URL=http://ollama_server:11434
-      - HF_TOKEN=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
+      - HF_TOKEN= ${HF_TOKEN}
 
       - NVIDIA_VISIBLE_DEVICES=all
     depends_on:
