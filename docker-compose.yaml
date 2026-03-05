@@ -19,32 +19,32 @@ services:
   # Service 2: Your Python Application
   app:
     build: ./app
-    container_name: FAQ-ASSISTANT
+    container_name: faq-assistant
     working_dir: /app
+    ports:
+      - "8000:8000"
+    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
     volumes:
-      # This maps your local code to the container
-      # So if you change main.py locally, it updates inside Docker
       - ./app:/app
     environment:
-      # Tells your code where to find Ollama
       - OLLAMA_BASE_URL=http://ollama_server:11434
+      - HF_TOKEN=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
+
+      - NVIDIA_VISIBLE_DEVICES=all
     depends_on:
       - ollama
-    # Keep the container running so you can run commands
-    stdin_open: true 
-    tty: true
 
-    # --- ADD THIS SECTION FOR WATCH ---
+    # --- NEWER METHOD: DEVELOP SECTION ---
     develop:
       watch:
-        # Sync changes from your local 'app' folder to the container '/app' folder
         - action: sync
           path: ./app
           target: /app
-        # Rebuild the container if requirements.txt changes (new libraries)
+          ignore:
+            - __pycache__
+            - venv
         - action: rebuild
           path: ./app/requirements.txt
-
 
 volumes:
   ollama_data:
