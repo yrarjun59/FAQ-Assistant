@@ -1,5 +1,4 @@
 services:
-  # Service 1: The AI Model (Ollama)
   ollama:
     image: ollama/ollama:latest
     container_name: ollama_server
@@ -7,44 +6,47 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
-    # CRITICAL: Give access to your NVIDIA GPU
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              count: 1 # for rtx 350
+              count: 1
               capabilities: [gpu]
 
-  # Service 2: Your Python Application
-  app:
+  backend:
     build: ./app
-    container_name: faq-assistant
+    container_name: backend_api
     working_dir: /app
-    ports:
-      - "8000:8000"
-    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ./app:/app
+      - ./chroma_db:/app/chroma_db
+      - ./knowledge/faqs:/app/knowledge
     environment:
-      - OLLAMA_BASE_URL=http://ollama_server:11434
-      - HF_TOKEN= ${HF_TOKEN}
-
-      - NVIDIA_VISIBLE_DEVICES=all
+      - OLLAMA_BASE_URL=http://ollama:11434
+    ports:
+      - "8000:8000"
     depends_on:
       - ollama
-
-    # --- NEWER METHOD: DEVELOP SECTION ---
     develop:
       watch:
         - action: sync
           path: ./app
           target: /app
-          ignore:
-            - __pycache__
-            - venv
-        - action: rebuild
-          path: ./app/requirements.txt
+
+  streamlit:
+    build: ./stream
+    container_name: streamlit_ui
+    working_dir: /app
+    volumes:
+      - ./stream:/app
+    ports:
+      - "8501:8501"
+    environment:
+      - STREAMLIT_ENV=development
+      - STELLA_API_URL=http://backend:8000
+    depends_on:
+      - backend
 
 volumes:
   ollama_data:

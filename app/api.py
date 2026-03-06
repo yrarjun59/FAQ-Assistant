@@ -1,12 +1,23 @@
 # api.py
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 import time
 
 from main import Stella
 
-# ------------------- APP INIT -------------------
-app = FastAPI(title="Stella: The Witty Space Assistant API")
+app = FastAPI(title="Stella API")
+
+# --- ADD THIS BLOCK ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    # allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# ---------------------
 
 assistant = Stella()
 
@@ -19,15 +30,16 @@ class QueryResponse(BaseModel):
     sources: list[str] = []
     time_taken: float
     context_docs: list = []
+    error: str | None = None
 
-# routes
 @app.get("/")
-def root():
-    return {"message": "🚀 Stella API is live. POST to /ask with your query."}
+def health_check():
+    return {"status": "online"}
+    
 
 @app.post("/chat", response_model=QueryResponse)
 def chat_endpoint(request: QueryRequest):
-    user_query = request.query.strip()\
+    user_query = request.query.strip()
     
     print(f"Received query: {user_query}")
 
@@ -38,6 +50,7 @@ def chat_endpoint(request: QueryRequest):
         start_time = time.time()
         result = assistant.ask(user_query)
         result['time_taken'] = time.time() - start_time
+        
         return QueryResponse(**result)
 
     except Exception as e:

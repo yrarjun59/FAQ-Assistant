@@ -40,10 +40,13 @@ class Stella:
         """Processes a query using the initialized RAG chain."""
         if not query.strip():
             return {"error": "Query cannot be empty."}
+        
         try:
             start_time = time.time()
 
             response = self.rag_chain.invoke({"input": query, "context": ""})
+            print("Retrieved docs:", len(response.get("context", [])))
+            
             answer = response['answer']
             context_docs = response.get("context", [])
             context_serialized = [{"content": d.page_content, "metadata": d.metadata} for d in context_docs]
@@ -57,9 +60,10 @@ class Stella:
             }
 
         except Exception as e:
-            return {"error": str(e)}
+            return {
+            "error": str(e)
+        }
         
-
     def run_cli(self):
         """Optional CLI interface for local testing."""
         print("--- ⭐ Stella: The Witty Space Assistant ---\n")

@@ -1,16 +1,17 @@
-import os
+from pathlib import Path
 import json
 import shutil
-from typing import List, Optional
+from typing import List
+import os
 
 from langchain_core.documents import Document
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 
+KNOWLEDGE_DIR = Path("knowledge/faqs")
+DB_PATH = Path("chroma_db")
 
-# --- CONFIGURATION ---
-KNOWLEDGE_DIR = "knowledge/faqs/"  
-DB_PATH = "chroma_db"     
+# DB_PATH = "chroma_db"     
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 
@@ -19,11 +20,14 @@ def load_documents(directory: str) -> List[Document]:
     Reads JSON files, extracts global context (company, category), 
     and maps them to individual FAQ items.
     """
-    print(f"=== STEP 1: LOADING DOCUMENTS FROM '{directory}' ===")
-    
-    if not os.path.exists(directory):
+    dir = Path(directory)
+    print(type(dir))
+
+    if not dir.is_dir():
         print(f"❌ Error: Directory '{directory}' not found.")
         return []
+    
+    print(f"=== STEP 1: loading files from {directory} exits ????'")
 
     files = [f for f in os.listdir(directory) if f.endswith(".json")]
     if not files:
@@ -78,11 +82,11 @@ def load_documents(directory: str) -> List[Document]:
                             "company": company,
                             "category": category,
                             "last_updated": last_updated,
-                            "question": question # Useful for debugging
+                            "question": question 
                         }
                     )
-                    documents.append(doc)
-                    
+                    documents.appe
+                    nd(doc)
         except Exception as e:
             print(f"⚠️ Error reading file {filename}: {e}")
 
@@ -271,7 +275,7 @@ def run_precision_audit(vector_store: Chroma):
     ids = all_data.get('ids', [])
     documents = all_data.get('documents', [])
     metadatas = all_data.get('metadatas', [])
-    embeddings = all_data.get('embeddings') # Returns None if missing, or List[List[float]]
+    embeddings = all_data.get('embeddings') 
 
     total_items = len(ids)
     print(f"📊 Total Items Found in DB: {total_items}")
@@ -345,20 +349,20 @@ def main():
     """Orchestrates the ingestion pipeline."""
     try:
         documents = load_documents(KNOWLEDGE_DIR)
-        embeddings = initialize_embedding_model(EMBEDDING_MODEL)        
-        if documents:
-            vector_store = create_vector_store(documents, embeddings, DB_PATH)
+        print(documents)
+        # embeddings = initialize_embedding_model(EMBEDDING_MODEL)        
+        # if documents:
+            # vector_store = create_vector_store(documents, embeddings, DB_PATH)
             
-            if vector_store:
+            # if vector_store:
                 # inspect_vector_store(vector_store)
-                
-                verify_search(vector_store, "food")
-                test_similarity_search(vector_store, "food")
 
-                run_precision_audit(vector_store)
-                # visualize_tokenization(" SpaceWing was founded on January 15, 2025, by a team of visionary aerospace engineers, entrepreneurs, and space enthusiasts.")
+                # print(verify_search(vector_store, "return"))
+                # print(test_similarity_search(vector_store, "return policy"))
+
+                # run_precision_audit(vector_store)
         # else:
-        #     print("🛑 Stopping: No documents to process.")
+            # print("🛑 Stopping: No documents to process.")
             
     except Exception as e:
         print(f"\n💥 Fatal Error: {e}")

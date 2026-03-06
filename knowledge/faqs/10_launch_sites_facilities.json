@@ -1,0 +1,47 @@
+{
+  "company": "SpaceWing",
+  "category": "Launch Sites & Facilities",
+  "last_updated": "2025-03-03",
+  "faqs": [
+    {
+      "question": "Where do SpaceWing flights launch from?",
+      "answer": "SpaceWing operates from three primary launch sites: SpaceWing Spaceport Cape Canaveral (Florida, USA), SpaceWing Mojave Spaceport (California, USA), and SpaceWing Houston Launch Complex (Texas, USA). International launch sites are being developed in Australia, the UAE, and the UK. Your launch site is assigned based on mission type and availability."
+    },
+    {
+      "question": "Can I choose my launch site?",
+      "answer": "Launch site preferences can be noted during booking. We try to accommodate requests based on mission requirements and availability. Some missions are site-specific—for example, lunar launches only occur from Cape Canaveral due to orbital mechanics requirements. A site change fee may apply if switching after initial assignment."
+    },
+    {
+      "question": "What facilities are available at the spaceports?",
+      "answer": "SpaceWing Spaceports feature: luxury hotels for pre-flight stays, fine dining restaurants, space museums and exhibits, gift shops, observation decks for family viewing, briefing rooms and training simulators, medical facilities, relaxation lounges, and our famous Countdown Restaurant overlooking the launch pad. Family members can enjoy these facilities while you complete final preparations."
+    },
+    {
+      "question": "How early should I arrive before my launch?",
+      "answer": "Arrival times vary by mission: Suborbital flights require arrival 5 days before launch for training and preparations. Orbital missions require arrival 7 days early. Lunar expeditions require 14 days for comprehensive preparation. Your personalized itinerary with exact dates and times is provided 90 days before your mission."
+    },
+    {
+      "question": "Can family members watch the launch?",
+      "answer": "Absolutely! Family viewing areas provide excellent views of launch and landing. We offer VIP viewing packages with prime seating, gourmet catering, and mission commentary. The experience is unforgettable—watching your loved one rocket into space, then celebrating their return. Families also have access to live mission feeds in dedicated viewing lounges."
+    },
+    {
+      "question": "Where do spacecraft land?",
+      "answer": "SpaceWing spacecraft land at the same spaceports they launch from, as well as several backup landing sites worldwide. Our Wing-X landing capability allows us to land like airplanes on runways, giving us flexibility for landing locations. Backup sites include: Edwards Air Force Base (California), White Sands (New Mexico), and international sites in Australia and Spain."
+    },
+    {
+      "question": "What is the SpaceWing Experience Center?",
+      "answer": "SpaceWing Experience Centers are located in major cities worldwide (New York, Los Angeles, London, Tokyo, Dubai, Singapore). These facilities offer: virtual reality space flight previews, training facility tours, spacecraft mockups, booking services, merchandise, and educational programs. They're perfect for exploring space travel before committing to a flight."
+    },
+    {
+      "question": "Is there parking at the spaceports?",
+      "answer": "All spaceports offer complimentary parking for travelers and their families during the mission duration. Valet parking is available for a premium. Many families choose to extend their stay and enjoy local attractions—we partner with nearby resorts and hotels for discounted rates."
+    },
+    {
+      "question": "Are the facilities accessible for people with disabilities?",
+      "answer": "Yes! All SpaceWing facilities are fully ADA compliant and designed for accessibility. We've successfully flown travelers with various disabilities including mobility limitations, hearing impairments, and visual impairments. Our training and spacecraft are adapted to accommodate different needs. Contact our Accessibility Services team to discuss specific requirements."
+    },
+    {
+      "question": "Can I visit a spaceport without booking a flight?",
+      "answer": "SpaceWing Spaceports offer public tours Tuesday through Sunday. Tours include: launch pad viewing, mission control visits, spacecraft hangar tours, museum access, and simulator experiences. Tour prices start at $75 for adults, $50 for children. It's a perfect way to experience space excitement before booking your flight!"
+    }
+  ]
+}

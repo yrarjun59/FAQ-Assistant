@@ -21,3 +21,5 @@ sentence-transformers
 
 # Pydantic (FastAPI dependency)
 pydantic
+
+streamlit

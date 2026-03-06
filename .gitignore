@@ -3,3 +3,6 @@
 app/__pycache__
 cmds.txt
 .claude
+chroma_db
+frontend
+app/chroma_db

@@ -1,0 +1,47 @@
+{
+  "company": "SpaceWing",
+  "category": "Destinations & Adventures",
+  "last_updated": "2025-03-03",
+  "faqs": [
+    {
+      "question": "What destinations does SpaceWing offer?",
+      "answer": "SpaceWing currently offers four main destinations: 1) Suborbital Experience (100km altitude), 2) Low Earth Orbit (SpaceWing Orbital Station), 3) International Space Station visits, and 4) Lunar orbit expeditions. Coming soon: Mars transit missions (projected 2030) and Venus atmospheric stations. Each destination offers unique experiences and varying durations."
+    },
+    {
+      "question": "How long is a typical suborbital flight?",
+      "answer": "Our StarHopper suborbital flights last approximately 2.5 hours from lift-off to landing. You'll experience 5-7 minutes of weightlessness at the peak altitude of 100 kilometers. The flight includes stunning views of Earth's curvature, the darkness of space, and approximately 4 minutes of sustained zero-gravity time for floating and acrobatics."
+    },
+    {
+      "question": "What can I do on the SpaceWing Orbital Station?",
+      "answer": "Our Orbital Station is a luxury space hotel offering: private cabins with Earth-view windows, gourmet space cuisine, zero-G recreation rooms, scientific experiments you can participate in, daily Earth observation sessions, spacewalk opportunities (additional cost), virtual reality entertainment, and live video calls with family back home. Missions range from 3-14 days."
+    },
+    {
+      "question": "Can I visit the International Space Station?",
+      "answer": "Yes! SpaceWing offers ISS rendezvous missions where you'll spend 8-12 days orbiting alongside professional astronauts. You'll tour the station, participate in educational activities, conduct supervised experiments, and experience the daily life of space professionals. This program requires additional training and medical clearance."
+    },
+    {
+      "question": "What is the lunar expedition like?",
+      "answer": "Our MoonGlider lunar expeditions are the ultimate space experience. The 14-day mission includes: 3-day transit to lunar orbit, 7 days orbiting the Moon with close flybys of historic landing sites, lunar surface observation with high-powered telescopes, and 4-day return journey. You'll see Earthrise over the lunar horizon—a view fewer than 30 humans have ever experienced."
+    },
+    {
+      "question": "Are there adventure add-ons available?",
+      "answer": "Absolutely! Adventure packages include: Spacewalk Experience ($150,000), where you'll suit up and float outside the spacecraft; Solo Capsule Flight ($50,000), piloting a small craft under instructor supervision; Scientific Mission ($25,000), conducting real research with our science team; and Photography Masterclass ($15,000), capturing professional-grade space imagery."
+    },
+    {
+      "question": "Can I propose my own destination or mission?",
+      "answer": "SpaceWing offers custom mission planning for private clients. If you have a specific destination or objective in mind, our Mission Design Team will work with you to create a bespoke experience. Past custom missions have included: asteroid flyby observations, satellite deployment ceremonies, and even space weddings! Contact our VIP Services team."
+    },
+    {
+      "question": "What is the most popular destination?",
+      "answer": "Our 3-day Low Earth Orbit mission to the SpaceWing Orbital Station is our bestseller, offering the perfect balance of time in space, activities, and cost. It provides extended weightlessness, incredible Earth views, and the full space station experience without the longer commitment of lunar missions."
+    },
+    {
+      "question": "Will there be Mars missions?",
+      "answer": "Yes! SpaceWing is actively developing our Mars Transit Program, projected to launch in 2030. Interest list registration is now open with a fully refundable $50,000 deposit. Mars missions will include approximately 6-month transit time, Mars orbit, and return. Full details will be announced as development progresses."
+    },
+    {
+      "question": "Are there any age restrictions for different destinations?",
+      "answer": "Suborbital flights: 12+ years (under 18 requires guardian). Orbital missions: 16+ years. Lunar expeditions: 18+ years only due to extended duration and complexity. There's no upper age limit for any destination; our oldest traveler was 82 years old on a suborbital flight. Medical fitness is the key factor, not age."
+    }
+  ]
+}
