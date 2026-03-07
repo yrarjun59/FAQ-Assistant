@@ -1,52 +1,63 @@
 import os
 import time
 from urllib import response
+from pathlib import Path
+
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaLLM
+
 
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.memory import ConversationBufferWindowMemory
 
-from prompts import WHIMSICAL_PROMPT
+from prompts import WHIMSICAL_PROMPT , RAG_PROMPT
 
-# config
-DB_PATH = "./chroma_db"
+
+DB_PATH = Path("chroma_db")
+
 OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 ACTIVE_MODEL = "llama3.2:1b"
 
+from langchain_core.globals import  set_debug, set_verbose
+set_debug(False) # for check how debugging works
+set_verbose(False)
 
 class Stella:
     """Encapsulates RAG initialization and query processing."""
     def __init__(self):
         self.rag_chain = None
-        self._initialize_rag()
-    
-    def _initialize_rag(self):
-        """Initializes LLM, embeddings, vector store, and RAG chain."""
+        self.vector_store = None
+        self._ensure_rag_ready()
+
+    def _ensure_rag_ready(self):
+        """Initialize RAG components only when needed."""
 
         if self.rag_chain is None:
+            start = time.time()
             print("🔧 Initializing RAG chain...")
             llm = OllamaLLM(model=ACTIVE_MODEL, base_url=OLLAMA_URL)
             embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-            vector_store = Chroma(persist_directory=DB_PATH,embedding_function=embeddings)
-            retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+            self.vector_store = Chroma(persist_directory=DB_PATH,embedding_function=embeddings)
+            retriever = self.vector_store.as_retriever(search_kwargs={"k": 3})
             combine_chain = create_stuff_documents_chain(llm, WHIMSICAL_PROMPT)
             self.rag_chain = create_retrieval_chain(retriever, combine_chain)
-            print("✅ RAG chain ready!")
+            elapsed = time.time() - start
+            print(f"✅ RAG ready in {elapsed:.2f}s")
+ 
 
+    
     def ask(self, query: str) -> dict:
         """Processes a query using the initialized RAG chain."""
+        self._ensure_rag_ready()
         if not query.strip():
             return {"error": "Query cannot be empty."}
-
-        print(f"user query: {query}")
         
         try:
             start_time = time.time()
-
             response = self.rag_chain.invoke({"input": query, "context": ""})
+
             print("Retrieved docs:", len(response.get("context", [])))
             
             answer = response['answer']
@@ -65,10 +76,9 @@ class Stella:
             return {
             "error": str(e)
         }
-        
+  
     def run_cli(self):
-        """Optional CLI interface for local testing."""
-        print("--- ⭐ Stella: The Witty Space Assistant ---\n")
+        """Interactive CLI for testing both modes."""
         print("✅ Chat is live! (Type 'exit' to quit)\n")
         while True:
             user_query = input("👨‍🚀 You: ").strip()
@@ -85,7 +95,18 @@ class Stella:
                 print(f"Time: {result['time_taken']:.2f}s")
                 print([f"📚 Source: {src}" for src in result.get("sources", [])])
 
+    def test_retrieval(self, query: str):
+        """Test RAG retrieval without LLM."""
         
+        docs = self.retrieve_docs(query)
+        print(f"\n🔎 Retrieved {len(docs)} docs\n")
+
+        for i, d in enumerate(docs):
+            print(f"--- Doc {i+1} ---")
+            print(d.page_content[:200])
+            print("Metadata:", d.metadata)
+            print()
+                    
 if __name__ == "__main__":
     assistant = Stella()
-    assistant.run_cli()
+    assistant.test_retrieval("fuckyou")

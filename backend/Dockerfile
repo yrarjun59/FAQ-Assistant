@@ -1,15 +1,15 @@
-FROM python:3.12-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y curl
 
-COPY requirements.txt .
+COPY requirements.in requirements.txt ./
 
 RUN pip install uv && \
     uv pip install --system -r requirements.txt
 
-    COPY . .
+COPY . .
 
 ENV OLLAMA_BASE_URL=http://ollama_server:11434
 
