@@ -1,5 +1,4 @@
 services:
-  # Service 1: The AI Model (Ollama)
   ollama:
     image: ollama/ollama:latest
     container_name: ollama_server
@@ -7,44 +6,50 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
-    # CRITICAL: Give access to your NVIDIA GPU
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              count: 1 # for rtx 350
+              count: 1
               capabilities: [gpu]
 
-  # Service 2: Your Python Application
-  app:
-    build: ./app
-    container_name: FAQ-ASSISTANT
+  backend:
+    build: ./backend
+    container_name: backend_api
     working_dir: /app
     volumes:
-      # This maps your local code to the container
-      # So if you change main.py locally, it updates inside Docker
-      - ./app:/app
+      - ./backend:/app
     environment:
-      # Tells your code where to find Ollama
-      - OLLAMA_BASE_URL=http://ollama_server:11434
+      - OLLAMA_BASE_URL=http://ollama:11434
+    ports:
+      - "8000:8000"
     depends_on:
       - ollama
-    # Keep the container running so you can run commands
-    stdin_open: true 
-    tty: true
-
-    # --- ADD THIS SECTION FOR WATCH ---
     develop:
       watch:
-        # Sync changes from your local 'app' folder to the container '/app' folder
         - action: sync
-          path: ./app
+          path: ./backend
           target: /app
-        # Rebuild the container if requirements.txt changes (new libraries)
-        - action: rebuild
-          path: ./app/requirements.txt
 
+  streamlit:
+    build: ./stream
+    container_name: streamlit_ui
+    working_dir: /app
+    volumes:
+      - ./stream:/app
+    ports:
+      - "8501:8501"
+    environment:
+      - STREAMLIT_ENV=development
+      - STELLA_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    develop:
+      watch:
+        - action: sync
+          path: ./stream
+          target: /app
 
 volumes:
   ollama_data:

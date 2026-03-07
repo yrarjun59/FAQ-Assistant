@@ -1,0 +1,29 @@
+#MainMenu, footer, header { display: none !important; }
+button[data-testid="scrollToBottomButton"] { display: none !important; }
+
+.sources-block {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    font-size: 12.5px;
+    color: #94a3b8;
+    line-height: 1.7;
+}
+.sources-block .src-title {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: #475569;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+.sources-block .src-item { padding: 1px 0; }
+
+.time-badge {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11px;
+    color: #475569;
+}

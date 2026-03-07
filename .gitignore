@@ -3,3 +3,10 @@
 app/__pycache__
 cmds.txt
 .claude
+chroma_db
+frontend
+app/chroma_db
+.txt
+stream/chat.py
+backend/CSV
+stream/__pycache__
