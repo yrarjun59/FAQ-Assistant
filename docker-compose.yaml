@@ -15,13 +15,11 @@ services:
               capabilities: [gpu]
 
   backend:
-    build: ./app
+    build: ./backend
     container_name: backend_api
     working_dir: /app
     volumes:
-      - ./app:/app
-      - ./chroma_db:/app/chroma_db
-      - ./knowledge/faqs:/app/knowledge
+      - ./backend:/app
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
     ports:
@@ -31,7 +29,7 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./app
+          path: ./backend
           target: /app
 
   streamlit:
@@ -47,6 +45,11 @@ services:
       - STELLA_API_URL=http://backend:8000
     depends_on:
       - backend
+    develop:
+      watch:
+        - action: sync
+          path: ./stream
+          target: /app
 
 volumes:
   ollama_data:
