@@ -1,263 +1,72 @@
 [
   {
     "role": "user",
-    "text": "Summarize the key topics",
-    "ts": 1772792021.9888926
+    "content": "hi"
   },
   {
     "role": "assistant",
-    "text": "Hello there, space traveler! I'm Stella, your friendly Space Assistant. Let me summarize the key topics for you:\n\n* Our mission at SpaceWing is to open space to humanity, making it an exciting and accessible destination for everyone.\n* To book a corporate mission, simply contact our dedicated Corporate Sales team at corporate@spacewing.com or 1-800-SPACE-WING ext. 4.\n* For media inquiries or breaking news, subscribe to our press distribution list, follow us on social media, or check our website for updates.\n\nAnd that's a blast off! (Sorry, had to sneak in a little cosmic humor!)",
-    "sources": [
-      "01_general_company_info.json",
-      "15_corporate_private_missions.json",
-      "18_media_press.json"
-    ],
-    "time_taken": 4.46,
-    "error": null,
-    "ts": 1772792034.1125689
-  },
-  {
-    "role": "user",
-    "text": "return policy",
-    "ts": 1772792061.3859308
-  },
-  {
-    "role": "assistant",
-    "text": "You're asking about the refund policy for SpaceWing, huh? Well, let me break it down for you in a way that's out of this world.\n\nTo be blunt, you can get a full refund if you change your mind and cancel your booking more than 180 days before your departure. That's right, space friends! You'll get your money back, minus a $500 processing fee. The longer you wait, the better the deal.\n\nNow, if you cancel between 90-180 days before departure, you'll get a 75% refund. It's like getting a sweet deal on a space ticket. And, if you book within 60 days, you might be able to get a 50% refund. But, don't count on it, space enthusiasts!\n\nSo, to recap: 100% refund if cancelled more than 180 days before departure, 75% refund if cancelled between 90-180 days before, and 50% refund if cancelled between 60-89 days before. And, remember, if you want to get a refund, you'll need to cancel at least 180 days before your departure. Easy peasy, lemon squeezy!\n\nAnd, as a special bonus, if you're a member of the SpaceWing Astronaut Society, you're in for some extra perks. You'll get a 5% discount on all future bookings, priority access to new missions, and more! After a few missions, you'll be a Captain's Circle member, and you'll enjoy a 10% lifetime discount. What a fantastic deal, right?",
-    "sources": [
-      "03_pricing_payment.json",
-      "03_pricing_payment.json",
-      "03_pricing_payment.json"
-    ],
-    "time_taken": 3.03,
-    "error": null,
-    "ts": 1772792080.2255104
-  },
-  {
-    "role": "user",
-    "text": "who are you ?",
-    "ts": 1772792193.7731104
-  },
-  {
-    "role": "assistant",
-    "text": "Greetings, space traveler! I'm Stella, your friendly Space Assistant here at SpaceWing. I'm delighted to be a part of your intergalactic journey. As you navigate the vast expanse of space, it's essential to remember that we, SpaceWing, are committed to ensuring a safe and enjoyable experience for all travelers. So, let's dive into our social media policy and customer support policies, shall we?\n\n**Our Social Media Policy:**\nTravelers may post about their experience freely! We provide complimentary WiFi for live posting and streaming. Guidelines include: no disclosure of proprietary information, no filming of other travelers without consent, and respectful content. Our social media team is available to assist with amplifying your posts. Tag @SpaceWing for a chance to be featured!\n\nAnd if you have any questions or concerns about our social media policy, feel free to ask. We're always here to help.",
+    "content": "We're happy to help you with your questions about SpaceWing. Since you asked about our social media policy for travelers, I found the relevant information in our Press Release. Here's what you can expect:\n\n• Complimentary WiFi for live posting and streaming\n• Guidelines for posting, including no disclosure of proprietary information and respectful content\n• Assistance from our social media team to amplify your posts\n• Option to be featured on our social media channels with a tag @SpaceWing\n\nIf you have any further questions or need help with media inquiries, feel free to contact our Communications Department at media@spacewing.com or 1-800-SPACE-WING ext. 7.",
     "sources": [
       "18_media_press.json",
-      "12_customer_support.json",
+      "09_inflight_experience.json",
       "18_media_press.json"
     ],
-    "time_taken": 1.93,
-    "error": null,
-    "ts": 1772792206.8993769
+    "time_taken": 1.54
   },
   {
     "role": "user",
-    "text": "what are your offers ?",
-    "ts": 1772792234.1914425
+    "content": "hello"
   },
   {
     "role": "assistant",
-    "text": "Get ready for the ultimate space adventure! As your friendly Space Assistant, I've got the scoop on what's available. We've got packages that'll take your space travel to the next level, and even some corporate perks to make your team-building mission a blast!\n\nFor thrill-seekers, our Adventure Packages are calling your name. Want to test your limits and float outside the spacecraft? Our Spacewalk Experience is a $150,000 thrill that's out of this world! On the other hand, are you ready to take the helm and pilot your own small capsule? Our Solo Capsule Flight is the perfect opportunity to soar to new heights.\n\nBut that's not all! Our Scientific Mission is a research-heavy experience that'll get your mind buzzing. And for the photography enthusiasts, our Photography Masterclass is the perfect way to capture the cosmos in all its glory. Whether you're a pro or a hobbyist, our packages have something for everyone.\n\nNow, let's talk about the little things that matter most. On our spacecraft, you'll enjoy amenities galore, from large observation windows to climate-controlled cabins and gourmet meal service. And don't worry about the basics \u2013 our space toilets are, well, space-proof!\n\nBut wait, there's more! Our SpaceWing Corporate Missions offer exclusive opportunities for teams to explore the galaxy. With full spacecraft charters, customized training, and even team-building exercises in zero-G, you'll be making memories that'll last a lifetime.\n\nSo, which package will you choose? Our prices start at $8 million for a 3-day orbital corporate retreat. Book now and get ready to blast off into the unknown!",
+    "content": "Your space flight experience is carefully designed to provide an out-of-this-world adventure. You'll start by ascending in our spacecraft, experiencing the thrill of launch and the magic of reaching space. Once in orbit, you'll have the opportunity to relax and enjoy the view, with meal services and on-board activities to keep you engaged. You can also take some amazing photos or simply gaze out at the stunning Earth below.",
     "sources": [
-      "05_destinations_adventures.json",
-      "07_spacecraft_technology.json",
-      "08_special_packages_offers.json"
-    ],
-    "time_taken": 3.08,
-    "error": null,
-    "ts": 1772792257.2851367
-  },
-  {
-    "role": "user",
-    "text": "rstsr",
-    "ts": 1772792460.0555117
-  },
-  {
-    "role": "assistant",
-    "text": "Greetings, astronaut! As your friendly Space Assistant, I'm here to help you navigate the galaxy of communication systems available on SpaceWing spacecraft. \n\nSpaceWing's comprehensive suite of communication systems includes:\n\n- S-band and Ka-band communications for voice and data\n- High-speed WiFi throughout the spacecraft\n- Real-time video conferencing\n- Streaming capabilities\n\nWhether you're embarking on a mission or just exploring the cosmos, you'll have access to these cutting-edge technologies to stay connected with the world below.",
-    "sources": [
-      "20_technical_specifications.json",
-      "08_special_packages_offers.json",
-      "18_media_press.json"
-    ],
-    "time_taken": 3.87,
-    "error": null,
-    "ts": 1772792466.5017195
-  },
-  {
-    "role": "user",
-    "text": "dsfsdfsdfsdf",
-    "ts": 1772792479.3896568
-  },
-  {
-    "role": "assistant",
-    "text": "**SpaceWing Communication Systems and Media Library**\n\nAs a valued space traveler, you're in luck! Our spacecraft feature a range of cutting-edge communication systems to keep you connected with the world below. Here's a rundown of what's available:\n\n- We utilize **S-band** and **Ka-band** communications for voice and data, ensuring reliable and fast communication throughout your journey.\n- For real-time video conferencing and streaming capabilities, our spacecraft is equipped with high-speed WiFi.\n- Emergency backup systems are in place to ensure you stay connected in case of any unexpected issues.\n\n**Explore Our Media Library**\n\nReady to capture the essence of your space adventure? Our media library is your go-to destination for high-resolution spacecraft images, mission photography, 4K video footage, crew and astronaut photos, facility tours, and animations/renderings. Most content is available royalty-free for editorial use with credit. If you have a specific request, feel free to submit it through our media portal, and our team will get to work on it for you!",
-    "sources": [
-      "20_technical_specifications.json",
+      "09_inflight_experience.json",
       "18_media_press.json",
-      "12_customer_support.json"
+      "09_inflight_experience.json"
     ],
-    "time_taken": 2.0,
-    "error": null,
-    "ts": 1772792485.977301
+    "time_taken": 1.01
   },
   {
     "role": "user",
-    "text": "sdfsdfsdfsdfsde",
-    "ts": 1772792493.048214
-  },
-  {
-    "role": "user",
-    "text": "sdfsdfsdfsdfsdf",
-    "ts": 1772792502.2861803
+    "content": "about return policy "
   },
   {
     "role": "assistant",
-    "text": "Hey there, SpaceStar! Are you ready for an out-of-this-world getaway? The SpaceCation bundle is your ticket to a luxury Earth vacation, all while you're soaring through the cosmos. Imagine 3 days at a partner resort near our spaceport, complete with spa treatments and relaxation to help you recharge. You'll also have access to your space mission, where you'll blast off into the unknown, and a week-long celebration vacation upon your return. It's the perfect way to unwind after a long spaceflight, and it's a great value \u2013 up to 15% off compared to booking separately. What do you say, SpaceStar? Are you ready to blast off?",
+    "content": "My star sensors are picking up static! I don't have information on that.",
     "sources": [
-      "08_special_packages_offers.json",
-      "12_customer_support.json",
-      "12_customer_support.json"
-    ],
-    "time_taken": 1.57,
-    "error": null,
-    "ts": 1772792506.5162852
-  },
-  {
-    "role": "user",
-    "text": "return policy",
-    "ts": 1772792598.5514977
-  },
-  {
-    "role": "assistant",
-    "text": "Welcome to the SpaceWing website! We're excited to help you with your booking questions.\n\nI'm Stella, your friendly Space Assistant here. If you're wondering about refunds or have other questions, feel free to ask. We're here to help.\n\nTo get started, let's address your question about refunds. You can receive a full refund if you change your mind and cancel your booking more than 180 days before departure. However, this applies to the original booking amount, minus a $500 processing fee. If you cancel within the 60-day period, you won't be eligible for a refund.\n\nNow, let's talk about the deposit requirement. A $10,000 refundable deposit is required to secure your reservation. This deposit is applied to your final payment and will be fully refundable if you cancel more than 180 days before departure. Within 180 days, the cancellation policy applies, and you'll need to meet the specific cancellation requirements.\n\nIf you're a SpaceWing Astronaut Society member, you're in for a treat! As a member, you'll enjoy exclusive benefits, including a 5% discount on all future bookings, priority access to new missions, complimentary cabin upgrades when available, and invitations to member-only events.\n\nAnd, after three missions, you'll qualify for our Captain's Circle with a 10% lifetime discount. But that's a topic for another time!\n\nDo you have any more questions or concerns?",
-    "sources": [
-      "03_pricing_payment.json",
+      "27_emergency_procedures.json",
       "03_pricing_payment.json",
       "03_pricing_payment.json"
     ],
-    "time_taken": 2.61,
-    "error": null,
-    "ts": 1772792607.0681431
+    "time_taken": 0.72
   },
   {
     "role": "user",
-    "text": "What documents can you search?",
-    "ts": 1772793801.0780413
+    "content": "your role and duty ?"
   },
   {
     "role": "assistant",
-    "text": "",
-    "sources": [],
-    "time_taken": 0.0,
-    "error": "Cannot connect to Stella API. Is the backend running?",
-    "ts": 1772793801.0848691
-  },
-  {
-    "role": "user",
-    "text": "hi there",
-    "ts": 1772793815.6299388
-  },
-  {
-    "role": "assistant",
-    "text": "Hey there, space traveler! I'm Stella, your friendly Space Assistant here. So, you're curious about our social media policy for travelers, huh? Well, let me take care of that for you. We want our space friends to be as comfortable and creative as they are in the vastness of space, so we provide complimentary WiFi for live posting and streaming. As for guidelines, just remember: no disclosure of proprietary information, no filming of other travelers without consent, and keep it respectful, okay? Our social media team is always here to help amplify your posts! Tag @SpaceWing for a chance to be featured, and don't forget to include the hashtag #SpaceWingSpaceTravelers. That way, we can keep track of all the amazing space stories from our fabulous travelers!",
+    "content": "Our dedicated crew is here to support you throughout your mission. We provide comprehensive support for all aspects of your journey, including family updates, mission documentation, and any follow-up needs.",
     "sources": [
-      "18_media_press.json",
       "12_customer_support.json",
+      "06_safety_medical.json",
       "12_customer_support.json"
     ],
-    "time_taken": 3.33,
-    "error": null,
-    "ts": 1772793823.8079278
+    "time_taken": 0.67
   },
   {
     "role": "user",
-    "text": "Find specific information",
-    "ts": 1772793851.0906157
+    "content": "future vision "
   },
   {
     "role": "assistant",
-    "text": "To book a corporate mission with SpaceWing, you can reach out to our Corporate Sales team at corporate@spacewing.com or 1-800-SPACE-WING ext. 4. They'll guide you through the process, which includes an initial consultation, mission design, proposal presentation, contract finalization, and mission coordination. Don't worry, it's all designed to keep your corporate space mission under wraps \u2013 your discretion is our top priority!",
+    "content": "Human, it's exciting to see the ambitious plans SpaceWing has laid out for their future missions. Their vision is truly audacious, aiming to make spaceflight routine, accessible, and transformative for billions of humans. By investing in research, development, and infrastructure, SpaceWing is pushing the boundaries of what's possible in space exploration.\n\nTo stay updated on future missions, I recommend following SpaceWing's social media accounts (@SpaceWing) and their newsletter at spacewing.com/newsletter. You can also join their Future Explorers program, which will provide you with exclusive updates and early booking opportunities for upcoming missions. Additionally, you can check out the company's interest list, which is open now, to reserve a spot for the Mars Transit Mission, Venus Atmospheric Station, Asteroid Mining Experience, or Lagrange Point Hotels.",
     "sources": [
-      "15_corporate_private_missions.json",
-      "12_customer_support.json",
-      "15_corporate_private_missions.json"
-    ],
-    "time_taken": 1.19,
-    "error": null,
-    "ts": 1772793855.0024574
-  },
-  {
-    "role": "user",
-    "text": "who are you ?",
-    "ts": 1772794044.9081976
-  },
-  {
-    "role": "assistant",
-    "text": "You're reaching out to SpaceWing, the amazing space travel company, to learn about their social media policy and customer support channels. I'm Stella, your friendly Space Assistant, here to help!",
-    "sources": [
-      "18_media_press.json",
-      "12_customer_support.json",
-      "18_media_press.json"
-    ],
-    "time_taken": 0.72,
-    "error": null,
-    "ts": 1772794046.8670769
-  },
-  {
-    "role": "user",
-    "text": "future missions ?",
-    "ts": 1772794069.0442283
-  },
-  {
-    "role": "assistant",
-    "text": "Hey space fans! As your friendly Space Assistant Stella, I've got the scoop on future missions for SpaceWing. It's like having a cosmic roadmap to exciting adventures in space!\n\nWe've got a thrilling lineup of missions on the horizon, including:\n\n* Mars Transit Mission: Blast off to the Red Planet in 2030! You'll get an orbital flyby and a chance to potentially land on Mars. Think of it as a cosmic road trip!\n* Venus Atmospheric Station: This floating habitat is set to launch in 2032. Imagine living and working in the upper atmosphere of Venus \u2013 it's like a futuristic sci-fi setting!\n* Asteroid Mining Experience: We're exploring the possibility of visiting near-Earth asteroids in 2035. Get ready for an out-of-this-world mining adventure!\n* Lagrange Point Hotels: These permanent stations will be stationed at stable orbital points. Picture yourself staying in a futuristic hotel while orbiting the Sun!\n\nBut don't worry, space enthusiasts! We're not just stopping at these destinations. We're also working on other exciting projects, like:\n\n* Refundable deposits for Mars missions (2029) \u2013 think of it as a chance to be one of the pioneers of this intergalactic journey!\n* More information about our Mars Transit Program will be announced as we approach launch (2028).\n\nSo, buckle up and get ready for some cosmic excitement! Whether you're a seasoned space traveler or just starting to explore, we've got something for everyone.",
-    "sources": [
+      "35_future_roadmap.json",
       "16_future_missions_roadmap.json",
-      "16_future_missions_roadmap.json",
-      "05_destinations_adventures.json"
+      "16_future_missions_roadmap.json"
     ],
-    "time_taken": 2.84,
-    "error": null,
-    "ts": 1772794080.9710228
-  },
-  {
-    "role": "user",
-    "text": "who are you ?",
-    "ts": 1772794313.7865305
-  },
-  {
-    "role": "assistant",
-    "text": "I'm Stella, your friendly and intelligent Space Assistant. *whispers* Don't worry, I won't tell anyone about your deep-seated curiosity about our company's policies... yet! As a seasoned space traveler myself, I'm here to help you navigate the cosmos of SpaceWing's social media policy and customer support.",
-    "sources": [
-      "18_media_press.json",
-      "12_customer_support.json",
-      "18_media_press.json"
-    ],
-    "time_taken": 0.96,
-    "error": null,
-    "ts": 1772794316.6897814
-  },
-  {
-    "role": "user",
-    "text": "What documents can you search?",
-    "ts": 1772794837.3844137
-  },
-  {
-    "role": "user",
-    "text": "Summarize the key topics",
-    "ts": 1772794851.2544467
-  },
-  {
-    "role": "assistant",
-    "text": "**About SpaceWing**\n\nAt SpaceWing, we're on a mission to make space exploration accessible, safe, and awe-inspiring for everyone. Our journey began with a simple yet powerful phrase: 'To open the cosmos to all humanity, transforming space from a destination for the few into a playground for the many.'\n\n**Our Core Values**\n\n* Accessibility: We believe that space should be a destination for all, not just a few.\n* Safety: We prioritize the well-being and safety of our crew members and the people we serve.\n* Awe-inspiring: We strive to make space exploration exciting and memorable for everyone.\n\n**Booking a Corporate Mission**\n\nTo plan your corporate space mission with SpaceWing, reach out to our dedicated Corporate Mission Specialists at [corporate@spacewing.com](mailto:corporate@spacewing.com) or 1-800-SPACE-WING ext. 4. Our team will guide you through the process, which includes:\n\n1. Initial consultation\n2. Mission design\n3. Proposal presentation\n4. Contract finalization\n5. Mission coordination\n\n**Breaking News**\n\nFor the latest mission updates and news, follow us on social media or sign up for our press distribution list. We'll keep you informed about mission progress and any breaking news that may affect your crew.",
-    "sources": [
-      "01_general_company_info.json",
-      "15_corporate_private_missions.json",
-      "18_media_press.json"
-    ],
-    "time_taken": 2.49,
-    "error": null,
-    "ts": 1772794861.5871334
+    "time_taken": 2.18
   }
 ]
