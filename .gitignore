@@ -6,3 +6,5 @@ cmds.txt
 chroma_db
 frontend
 app/chroma_db
+.txt
+stream/chat.py
