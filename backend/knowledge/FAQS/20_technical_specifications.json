@@ -1,0 +1,47 @@
+{
+  "company": "SpaceWing",
+  "category": "Technical Specifications",
+  "last_updated": "2025-03-03",
+  "faqs": [
+    {
+      "question": "What is the maximum altitude SpaceWing flights reach?",
+      "answer": "SpaceWing offers flights to various altitudes: StarHopper suborbital flights reach 100-110 km (the Kármán line, internationally recognized as the boundary of space). OrbitalOne missions operate at 400-450 km altitude, similar to the International Space Station. MoonGlider lunar expeditions travel approximately 384,400 km to lunar orbit. Each altitude offers unique experiences and views."
+    },
+    {
+      "question": "How fast do SpaceWing spacecraft travel?",
+      "answer": "Speeds vary by mission: StarHopper reaches Mach 3 (approximately 3,700 km/h) at peak velocity. OrbitalOne travels at approximately 28,000 km/h (orbital velocity) to maintain low Earth orbit. MoonGlider accelerates to approximately 40,000 km/h for lunar transfer. The sensation of speed is most noticeable during launch and re-entry."
+    },
+    {
+      "question": "What propulsion systems do SpaceWing spacecraft use?",
+      "answer": "StarHopper uses our SW-1 hybrid rocket engine with liquid oxygen and kerosene propellants. OrbitalOne features SW-2 cryogenic engines (liquid oxygen/liquid hydrogen) for primary propulsion with hypergolic thrusters for maneuvering. MoonGlider incorporates our advanced SW-3 engines optimized for deep space missions. All engines are designed and manufactured in-house."
+    },
+    {
+      "question": "What are the G-force profiles during flight?",
+      "answer": "G-forces vary by mission phase: Launch typically involves 3-4G for approximately 3 minutes (like a firm hug from a heavy blanket). Orbital insertion involves brief 2-3G periods. Re-entry in our Wing-X vehicles creates a gentle 1.5-2G deceleration—significantly lower than traditional capsule returns. Suborbital flights offer the mildest G-force experience, with some passengers barely noticing."
+    },
+    {
+      "question": "How long does each mission phase last?",
+      "answer": "Suborbital: 10-minute ascent, 5-7 minutes in space, 20-minute descent. Orbital: 12-minute ascent, 3-14 days in orbit, 45-minute descent. Lunar: 3-day transit to Moon, 7 days in lunar orbit, 4-day return. These durations are approximate and may vary based on mission parameters and orbital mechanics."
+    },
+    {
+      "question": "What life support systems are on board?",
+      "answer": "All SpaceWing spacecraft feature: closed-loop environmental control, oxygen generation and CO2 scrubbing, temperature and humidity control, water recovery and purification, fire detection and suppression, and backup systems for all critical functions. Life support exceeds NASA safety standards with triple redundancy on all life-critical systems."
+    },
+    {
+      "question": "What is the spacecraft cabin pressure and atmosphere?",
+      "answer": "SpaceWing spacecraft maintain sea-level equivalent pressure (101.3 kPa / 14.7 psi) with standard Earth atmosphere composition (78% nitrogen, 21% oxygen). This means no pre-breathing or acclimatization is needed before spacewalks—just suit up and go! Temperature is maintained at a comfortable 20-24°C (68-75°F)."
+    },
+    {
+      "question": "How much cargo can passengers bring?",
+      "answer": "Personal item allowance: 10 kg in a soft-sided bag for suborbital flights, 15 kg for orbital missions, and 20 kg for lunar expeditions. Dimensions must not exceed 45 linear cm (total of length + width + height). Additional cargo space can be arranged for special items (scientific equipment, commemorative items) at additional cost."
+    },
+    {
+      "question": "What communication systems are available?",
+      "answer": "SpaceWing spacecraft feature: S-band and Ka-band communications for voice and data, high-speed WiFi throughout the spacecraft, real-time video conferencing, streaming capabilities, and emergency backup systems. Communication is maintained throughout the mission via our satellite network and ground stations worldwide."
+    },
+    {
+      "question": "What is the spacecraft made of?",
+      "answer": "SpaceWing spacecraft use advanced materials including: carbon fiber composites for the primary structure (lightweight and strong), titanium for high-stress components, aluminum-lithium alloy for fuel tanks, silica tiles and advanced thermal protection for re-entry, and polycarbonate windows with UV protection. All materials are extensively tested and space-qualified."
+    }
+  ]
+}

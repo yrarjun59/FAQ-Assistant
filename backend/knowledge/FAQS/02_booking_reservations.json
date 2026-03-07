@@ -1,0 +1,47 @@
+{
+  "company": "SpaceWing",
+  "category": "Booking & Reservations",
+  "last_updated": "2025-03-03",
+  "faqs": [
+    {
+      "question": "How do I book a space flight with SpaceWing?",
+      "answer": "Booking your space adventure is easy! Visit our website at www.spacewing.com and click 'Book Now', call our reservations team at 1-800-SPACE-WING, or visit any SpaceWing Experience Center. You'll choose your destination, select your travel dates, pick your cabin class, and complete our secure payment process. A $10,000 refundable deposit reserves your spot."
+    },
+    {
+      "question": "What is the minimum age requirement for space travel?",
+      "answer": "The minimum age for SpaceWing flights is 18 years old for independent travel. Travelers aged 12-17 may fly with written consent from a parent or legal guardian who must accompany them. Children under 12 are not permitted on space flights due to medical and safety considerations. All travelers must pass our medical screening."
+    },
+    {
+      "question": "Can I reserve a seat without a specific date?",
+      "answer": "Yes! Our Flexi-Flight program allows you to reserve your seat with a deposit and choose your travel date within a 24-month window. This is perfect for those with flexible schedules. Flexi-Flight reservations receive priority notification when new dates become available and can be transferred to family members."
+    },
+    {
+      "question": "How far in advance should I book my space flight?",
+      "answer": "We recommend booking 6-12 months in advance for orbital flights and 18-24 months for lunar expeditions. However, last-minute seats occasionally become available through our SpaceWait program, which offers discounted rates for travelers who can depart within 30 days of booking."
+    },
+    {
+      "question": "What payment methods does SpaceWing accept?",
+      "answer": "SpaceWing accepts all major credit cards (Visa, MasterCard, American Express, Discover), bank transfers, cryptocurrency (Bitcoin, Ethereum), and SpaceWing gift cards. We also offer financing through SpaceCredit, our partnership with leading financial institutions, with terms up to 60 months."
+    },
+    {
+      "question": "Is there a group booking discount?",
+      "answer": "Absolutely! Groups of 4-7 travelers receive a 5% discount, groups of 8-15 receive 10% off, and groups of 16 or more receive 15% off the total booking. Corporate and educational group rates are also available. Contact our Group Sales team for customized packages."
+    },
+    {
+      "question": "Can I modify my reservation after booking?",
+      "answer": "Yes, modifications are permitted up to 90 days before departure with a $500 change fee. Within 90 days, changes are subject to availability and may incur higher fees. Date changes within the same mission class are easier to accommodate than destination or cabin class changes."
+    },
+    {
+      "question": "What happens if SpaceWing cancels my flight?",
+      "answer": "In the rare event SpaceWing cancels your flight, you'll receive a full refund plus a 10% credit toward a future booking. Alternatively, you can transfer to the next available mission at no additional cost. We'll also cover reasonable hotel and travel expenses incurred due to the cancellation."
+    },
+    {
+      "question": "Do you offer gift certificates for space flights?",
+      "answer": "Yes! SpaceWing gift certificates make the ultimate gift. Available in any amount from $1,000 to the full cost of a mission, our gift certificates never expire and can be used for any SpaceWing product or service. Physical gift cards and digital certificates are available."
+    },
+    {
+      "question": "Is travel insurance available for space flights?",
+      "answer": "SpaceWing partners with SpaceSure Insurance to offer comprehensive space travel insurance. Coverage includes trip cancellation, medical emergencies in space, baggage protection, and mission interruption. Premiums start at 5% of your booking cost. We strongly recommend all travelers purchase insurance."
+    }
+  ]
+}
