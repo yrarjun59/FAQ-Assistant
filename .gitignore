@@ -8,3 +8,4 @@ frontend
 app/chroma_db
 .txt
 stream/chat.py
+backend/CSV
