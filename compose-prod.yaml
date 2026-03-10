@@ -50,7 +50,7 @@ services:
       - "8501:8501"
     environment:
       - STELLA_API_URL=http://backend:8000
-    volummes:
+    volumes:
       - ./stream:/app/stream
     
     depends_on:
