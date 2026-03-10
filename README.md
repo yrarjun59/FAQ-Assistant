@@ -91,7 +91,7 @@ Save `compose.prod.yaml` from this repo or copy it from below.
 ### 2. Start everything
 
 ```bash
-docker compose -f compose.prod.yaml up
+docker compose -f compose-prod.yaml up
 ```
 
 ### 3. Open the app
@@ -155,6 +155,6 @@ docker compose up --build
 ### From Docker Hub (Option B)
 
 ```bash
-docker compose -f compose.prod.yaml pull
-docker compose -f compose.prod.yaml up
+docker compose -f compose-prod.yaml pull
+docker compose -f compose-prod.yaml up
 ```
