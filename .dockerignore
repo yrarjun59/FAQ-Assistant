@@ -6,7 +6,7 @@ dist
 npm-debug.log
 yarn-error.log
 
-
+frontend
 __pycache__/
 *.pyc
 *.pyo
@@ -27,5 +27,7 @@ Thumbs.db
 .vscode/
 .idea/
 
+stream/__pycache__
+backend/__pycache__
 
-docker-compose.override.yml
+stream/chat_history.json

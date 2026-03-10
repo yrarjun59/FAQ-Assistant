@@ -17,7 +17,8 @@ langchain-huggingface
 chromadb
 
 # Embeddings
-sentence-transformers
+# sentence-transformers
+fastembed
 
 # Pydantic (FastAPI dependency)
 pydantic
