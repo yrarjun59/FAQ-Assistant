@@ -28,12 +28,14 @@ services:
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - LLM_MODEL=${LLM_MODEL:-llama3.2:1b}
-      - EMBED_MODEL=${EMBED_MODEL:-nomic-embed-text}
+      - CACHE_DIR=/app/fastembed_cache
     volumes:
-      - chroma_data:/app/chroma_db
+      - ./backend/vector_db:/app/vector_db
+      - ./backend/fastembed_cache:/app/fastembed_cache
+      - ./backend:/app/backend
     depends_on:
-      ollama-init:
-        condition: service_completed_successfully
+      ollama:
+        condition:  service_healthy
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
       interval: 10s
@@ -42,16 +44,20 @@ services:
       start_period: 40s
 
   streamlit:
-    image: yrarjun59/faq-frontend:latest  # ← pulls from Docker Hub
+    image: yrarjun59/faq-frontend:latest 
     container_name: streamlit_ui
     ports:
       - "8501:8501"
     environment:
       - STELLA_API_URL=http://backend:8000
+    volummes:
+      - ./stream:/app/stream
+    
     depends_on:
       backend:
         condition: service_healthy
 
 volumes:
   ollama_data:
-  chroma_data:
+  vecotor_db:
+  fastembed_cache:

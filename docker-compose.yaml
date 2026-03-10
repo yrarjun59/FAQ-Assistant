@@ -19,11 +19,13 @@ services:
     container_name: backend_api
     working_dir: /app
     volumes:
-      - vector_db:/app/vector_db
-      - fastembed_cache:/root/.cache/fastembed
+      - ./backend/vector_db:/app/vector_db
+      - ./backend/fastembed_cache:/app/fastembed_cache
+      - ./backend:/app
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - LLM_MODEL=${LLM_MODEL:-llama3.2:1b}
+      - CACHE_DIR=/app/fastembed_cache
     ports:
       - "8000:8000"
     depends_on:
@@ -44,12 +46,10 @@ services:
     build: ./stream
     container_name: streamlit_ui
     working_dir: /app
-    volumes:
-      - ./stream:/app
-    ports:
-      - "8501:8501"
     environment:
       - STELLA_API_URL=http://backend:8000
+    ports:
+      - "8501:8501"
     depends_on:
       - backend
     develop:
@@ -62,3 +62,4 @@ volumes:
   ollama_data:
   vector_db:
   fastembed_cache:
+  
