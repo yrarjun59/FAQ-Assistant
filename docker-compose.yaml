@@ -15,7 +15,7 @@ services:
               capabilities: [gpu]
 
   backend:
-    build: ./backend
+    image: yrarjun59/faq-backend:latest    
     container_name: backend_api
     working_dir: /app
     volumes:
@@ -30,22 +30,15 @@ services:
       - "8000:8000"
     depends_on:
       - ollama
-    volumes:
-      - ./stream:/app/stream
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 40s
-    # develop:
-    #   watch:
-    #     - action: sync
-    #       path: ./backend
-    #       target: /app
 
   streamlit:
-    build: ./stream
+    image: yrarjun59/faq-frontend:latest 
     container_name: streamlit_ui
     working_dir: /app
     environment:
@@ -54,11 +47,8 @@ services:
       - "8501:8501"
     depends_on:
       - backend
-    # develop:
-      # watch:
-      #   - action: sync
-      #     path: ./stream
-      #     target: /app
+    volumes:
+      - ./stream:/app/stream
 
 volumes:
   ollama_data:
