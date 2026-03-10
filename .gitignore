@@ -10,3 +10,8 @@ app/chroma_db
 stream/chat.py
 backend/CSV
 stream/__pycache__
+stream/chat_history.json
+backend/visualize_token.py
+trequire.txt
+frontend
+knowledge
