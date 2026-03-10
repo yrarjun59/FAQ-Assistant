@@ -1,12 +1,14 @@
+
+from ollama_setup import setup
+
+setup() # make sure ollama model runs before api run
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import time
-
-from ollama_setup import setup
 from main import Stella
 
-setup() # make sure ollama model runs before api run
 
 app = FastAPI(title="Stella API")
 
