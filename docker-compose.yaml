@@ -21,7 +21,7 @@ services:
     volumes:
       - ./backend/vector_db:/app/vector_db
       - ./backend/fastembed_cache:/app/fastembed_cache
-      - ./backend:/app
+      - ./backend:/app/backend
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - LLM_MODEL=${LLM_MODEL:-llama3.2:1b}
@@ -30,17 +30,19 @@ services:
       - "8000:8000"
     depends_on:
       - ollama
+    volumes:
+      - ./stream:/app/stream
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 40s
-    develop:
-      watch:
-        - action: sync
-          path: ./backend
-          target: /app
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./backend
+    #       target: /app
 
   streamlit:
     build: ./stream
@@ -52,11 +54,11 @@ services:
       - "8501:8501"
     depends_on:
       - backend
-    develop:
-      watch:
-        - action: sync
-          path: ./stream
-          target: /app
+    # develop:
+      # watch:
+      #   - action: sync
+      #     path: ./stream
+      #     target: /app
 
 volumes:
   ollama_data:
