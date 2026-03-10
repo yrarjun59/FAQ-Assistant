@@ -13,34 +13,9 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-
-  ollama-init:
-    image: ollama/ollama:latest
-    container_name: ollama_init
-    depends_on:
-      ollama:
-        condition: service_healthy
-    volumes:
-      - ollama_data:/root/.ollama
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
-    entrypoint: >
-      /bin/sh -c "
-        echo 'Pulling models...' &&
-        ollama pull ${LLM_MODEL:-llama3.2:1b} &&
-        echo 'Models ready'
-      "
-    restart: "no" 
 
   backend:
     build: ./backend
-    image: yrajun59/faq-backend:latest
     container_name: backend_api
     working_dir: /app
     volumes:
@@ -52,15 +27,13 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      ollama-init:
-        condition: service_completed_successfully
+      - ollama
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 40s
-
     develop:
       watch:
         - action: sync
@@ -69,7 +42,6 @@ services:
 
   streamlit:
     build: ./stream
-    image: yrajun59/faq-frontend:latest
     container_name: streamlit_ui
     working_dir: /app
     volumes:
