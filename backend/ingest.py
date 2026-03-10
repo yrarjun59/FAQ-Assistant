@@ -7,14 +7,16 @@ from typing import List
 
 from langchain_core.documents import Document
 from langchain_community.vectorstores import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
+# from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import FastEmbedEmbeddings
 
 
 KNOWLEDGE_DIR = Path("knowledge/FAQS")
-DB_PATH = Path("chroma_db")
+DB_PATH = Path("vector_db")
 csv_dir = Path("CSV")
 
-EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+# EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 
 def load_documents(directory: str) -> List[Document]:
 
@@ -87,7 +89,8 @@ def load_documents(directory: str) -> List[Document]:
 
     return documents
 
-def initialize_embedding_model(model_name: str) -> HuggingFaceEmbeddings:
+# def initialize_embedding_model(model_name: str) -> HuggingFaceEmbeddings:
+def initialize_embedding_model(model_name: str) -> FastEmbedEmbeddings:
     """
     Initializes the HuggingFace embedding model on CPU.
     """
@@ -96,7 +99,8 @@ def initialize_embedding_model(model_name: str) -> HuggingFaceEmbeddings:
     
     try:
         # OPTIMIZATION: Force CPU usage to save GPU VRAM for the LLM
-        embeddings = HuggingFaceEmbeddings(
+        # embeddings = HuggingFaceEmbeddings(
+        embeddings = FastEmbedEmbeddings(
             model_name=model_name,
             model_kwargs={'device': 'cpu'},
             encode_kwargs={'normalize_embeddings': True} 

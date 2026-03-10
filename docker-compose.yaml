@@ -19,13 +19,21 @@ services:
     container_name: backend_api
     working_dir: /app
     volumes:
-      - ./backend:/app
+      - vector_db:/app/vector_db
+      - fastembed_cache:/root/.cache/fastembed
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
+      - LLM_MODEL=${LLM_MODEL:-llama3.2:1b}
     ports:
       - "8000:8000"
     depends_on:
       - ollama
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
     develop:
       watch:
         - action: sync
@@ -41,7 +49,6 @@ services:
     ports:
       - "8501:8501"
     environment:
-      - STREAMLIT_ENV=development
       - STELLA_API_URL=http://backend:8000
     depends_on:
       - backend
@@ -53,3 +60,5 @@ services:
 
 volumes:
   ollama_data:
+  vector_db:
+  fastembed_cache:

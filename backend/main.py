@@ -3,26 +3,30 @@ import time
 from urllib import response
 from pathlib import Path
 
-from langchain_huggingface import HuggingFaceEmbeddings
+# from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import FastEmbedEmbeddings
+from langchain_ollama import OllamaLLM , OllamaEmbeddings
 from langchain_chroma import Chroma
-from langchain_ollama import OllamaLLM
-
 
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.memory import ConversationBufferWindowMemory
 
+# from transformers.utils.logging import set_verbosity_error
+from langchain_core.globals import  set_debug, set_verbose
+
+
 from prompts import WHIMSICAL_PROMPT , RAG_PROMPT
 
 
-DB_PATH = Path("chroma_db")
+DB_PATH = Path("vector_db")
 
 OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 ACTIVE_MODEL = "llama3.2:1b"
 
-from langchain_core.globals import  set_debug, set_verbose
-set_debug(False) # for check how debugging works
+set_debug(False) 
 set_verbose(False)
+
 
 class Stella:
     """Encapsulates RAG initialization and query processing."""
@@ -38,7 +42,12 @@ class Stella:
             start = time.time()
             print("🔧 Initializing RAG chain...")
             llm = OllamaLLM(model=ACTIVE_MODEL, base_url=OLLAMA_URL)
-            embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+            embeddings = FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+
+            # hfembeddings = FastEmbedEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+            # pull once, lives in ollama_data volume
+            # oembeddings = OllamaEmbeddings(base_url="http://ollama:11434",model="nomic-embed-text")   
+
             self.vector_store = Chroma(persist_directory=DB_PATH,embedding_function=embeddings)
             retriever = self.vector_store.as_retriever(search_kwargs={"k": 3})
             combine_chain = create_stuff_documents_chain(llm, WHIMSICAL_PROMPT)
@@ -109,4 +118,5 @@ class Stella:
                     
 if __name__ == "__main__":
     assistant = Stella()
-    assistant.test_retrieval("fuckyou")
+    assistant.run_cli()
+    # assistant.test_retrieval("fuckyou")
