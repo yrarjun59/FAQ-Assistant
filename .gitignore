@@ -16,3 +16,6 @@ trequire.txt
 frontend
 knowledge
 backend/vector_db
+backend/test.py
+backend/fastembed_cache
+backend/__pycache__
