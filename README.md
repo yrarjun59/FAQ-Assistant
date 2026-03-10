@@ -48,7 +48,7 @@ Answer displayed in Streamlit UI with typewriter effect
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yrarjun59/FAQ-Assistant
+git clone https://github.com/yrarjun59/FAQ-Assistant.git
 cd FAQ-Assistant
 ```
 
