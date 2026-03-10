@@ -4,7 +4,7 @@ from pathlib import Path
 
 import history  
 
-BASE_URL = os.getenv("STELLA_API_URL", "http://backend:8000") + "/chat"
+BASE_URL = os.getenv("STELLA_API_URL", "http://localhost:8000") + "/chat"
 
 st.set_page_config(page_title="Stella", page_icon="✨")
 
@@ -45,7 +45,7 @@ def show_meta(sources: list, elapsed) -> None:
 def typewrite(text: str) -> str:
     placeholder = st.empty()
     displayed   = ""
-    delay = max(0.02, min(0.06, 4.0 / max(len(text), 1)))
+    delay = max(0.02, min(0.02, 4.0 / max(len(text), 1)))
     for char in text:
         displayed += char
         placeholder.markdown(displayed + "▌")
