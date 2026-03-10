@@ -86,7 +86,7 @@ Only requires Docker Desktop. No code needed.
 
 ### 1. Download the production compose file
 
-Save `compose.prod.yaml` from this repo or copy it from below.
+Save `compose-prod.yaml` from this repo or copy it from below.
 
 ### 2. Start everything
 
