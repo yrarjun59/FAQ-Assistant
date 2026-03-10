@@ -2,14 +2,14 @@ import os
 import csv
 from pathlib import Path
 import json
-import shutil
 from typing import List
 
 from langchain_core.documents import Document
-from langchain_community.vectorstores import Chroma
-# from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
 from langchain_community.embeddings import FastEmbedEmbeddings
 
+cache_dir = Path("/app/fastembed_cache")
+os.makedirs(cache_dir, exist_ok=True)
 
 KNOWLEDGE_DIR = Path("knowledge/FAQS")
 DB_PATH = Path("vector_db")
@@ -61,7 +61,7 @@ def load_documents(directory: str) -> List[Document]:
 
                     # --- ENRICH CONTENT ---
                     # We inject metadata into the text so the AI knows the context
-                    # This allows the AI to answer "Who runs this company?"
+
                     content = (
                         f"Company: {company}\n"
                         f"Category: {category}\n"
@@ -89,8 +89,7 @@ def load_documents(directory: str) -> List[Document]:
 
     return documents
 
-# def initialize_embedding_model(model_name: str) -> HuggingFaceEmbeddings:
-def initialize_embedding_model(model_name: str) -> FastEmbedEmbeddings:
+def initialize_embedding_model(model_name: str):
     """
     Initializes the HuggingFace embedding model on CPU.
     """
@@ -99,9 +98,9 @@ def initialize_embedding_model(model_name: str) -> FastEmbedEmbeddings:
     
     try:
         # OPTIMIZATION: Force CPU usage to save GPU VRAM for the LLM
-        # embeddings = HuggingFaceEmbeddings(
         embeddings = FastEmbedEmbeddings(
             model_name=model_name,
+            cache_dir=str(cache_dir),
             model_kwargs={'device': 'cpu'},
             encode_kwargs={'normalize_embeddings': True} 
         )
@@ -118,27 +117,21 @@ def create_vector_store(documents: List[Document], embeddings, persist_path: str
     Creates a Chroma vector store from documents and embeddings, saving it to disk.
     """
     print(f"\n=== STEP 3: CREATING VECTOR STORE ===")
-    
-    # Clean up old database if it exists to ensure fresh data
-    if persist_path.exists() and persist_path.is_dir():
-        print(f"🧹 Cleaning up old database at '{persist_path}'...")
-        shutil.rmtree(persist_path)
-
-    elif not persist_path.exists():
-        print(f"📂 Creating new database directory '{persist_path}'...")
-        os.makedirs(persist_path, exist_ok=True)
 
     try:
         print(f"💾 Processing {len(documents)} documents...")
-        
+
+        # Recreate vector store after deletion
         vector_store = Chroma.from_documents(
             documents=documents,
             embedding=embeddings,
-            persist_directory=str(persist_path)
+            persist_directory=str(persist_path),
+            collection_name="faq_collection"
         )
-        
+
         print(f"✅ Successfully saved {len(documents)} vectors to '{persist_path}'")
         return vector_store
+
     except Exception as e:
         print(f"❌ Failed to create vector store: {e}")
         raise
@@ -174,68 +167,6 @@ def save_documents_to_csv(documents: List[Document], save_dir: str, csv_name="me
     except Exception as e:
         print(f"⚠️ Error saving CSV: {e}")
 
-def verify_search(vector_store: Chroma, query: str) -> None:
-    """
-    Performs a test search on the created vector store to verify it works.
-    """
-    print(f"\n=== STEP 4: VERIFYING SEARCH ===")
-    print(f"🔍 Searching for: '{query}'...")
-    
-    try:
-        results = vector_store.similarity_search(query, k=3)
-        
-        if results:
-            print("\n🔥 TOP MATCH FOUND:")
-            print(results[0].page_content)
-        else:
-            print("⚠️ No results found for the query.")
-    except Exception as e:
-        print(f"❌ Search failed: {e}")
-
-def inspect_vector_store(vector_store: Chroma, limit: int = 5):
-    """Print sample entries from the vector store."""
-
-    print("\n🔎 Inspecting Vector Store")
-
-    try:
-        data = vector_store._collection.get(
-            limit=limit,
-            include=["documents", "metadatas"]
-        )
-
-        ids = data.get("ids", [])
-        docs = data.get("documents", [])
-        metas = data.get("metadatas", [])
-
-        for i in range(len(ids)):
-            print(f"\n--- Item {i+1} ---")
-            print("ID:", ids[i])
-            print("Text:", docs[i][:150], "...")
-            print("Metadata:", metas[i])
-
-    except Exception as e:
-        print("❌ Inspection failed:", e)
-
-def test_similarity_search(vector_store: Chroma, query: str, k: int = 5):
-    """Test semantic search results."""
-
-    print(f"\n🔎 Testing Query: {query}")
-
-    try:
-        results = vector_store.similarity_search_with_score(query, k=k)
-
-        for i, (doc, score) in enumerate(results):
-            similarity = (1 - score) * 100
-
-            print(f"\n--- Result {i+1} ---")
-            print(f"Similarity: {similarity:.2f}%")
-            print("Text:", doc.page_content[:120], "...")
-            print("Metadata:", doc.metadata)
-
-    except Exception as e:
-        print("❌ Search failed:", e)
-
-
 def main():
     """Orchestrates the ingestion pipeline."""
     try:
@@ -244,17 +175,6 @@ def main():
         if documents is not None and len(documents) > 0:
             embeddings = initialize_embedding_model(EMBEDDING_MODEL)        
             vector_store = create_vector_store(documents, embeddings, DB_PATH)
-            
-            if vector_store is not None:
-                inspect_vector_store(vector_store)
-                data = vector_store._collection.get()
-
-                print(len(data["documents"]))
-                print(data["documents"][0])
-                print(data["metadatas"][0])
-
-                print(verify_search(vector_store, "fuck"))
-                print(test_similarity_search(vector_store, "pussy"))
         else:
             print("🛑 Stopping: No documents to process.")
             
