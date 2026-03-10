@@ -21,6 +21,11 @@ Answer displayed in Streamlit UI with typewriter effect
 ```
 
 ---
+## Project Workflow
+
+![alt text](faq-workflow.png)
+
+---
 
 ## ⚙️ Tech Stack
 
@@ -29,7 +34,7 @@ Answer displayed in Streamlit UI with typewriter effect
 | Frontend | Streamlit |
 | Backend | FastAPI + Python |
 | LLM | Ollama (llama3.2:1b or any model) |
-| Embeddings | Ollama (nomic-embed-text) |
+| Embeddings | LangChain FastEmbedEmbeddings |
 | Vector DB | ChromaDB |
 | Orchestration | Docker Compose |
 
