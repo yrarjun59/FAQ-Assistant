@@ -4,7 +4,7 @@ from pathlib import Path
 
 import history  
 
-BASE_URL = os.getenv("STELLA_API_URL", "http://localhost:8000") + "/chat"
+BASE_URL = os.getenv("STELLA_API_URL", "http://backend:8000") + "/chat"
 
 st.set_page_config(page_title="Stella", page_icon="✨")
 
@@ -21,7 +21,7 @@ with col1:
     st.title("✨ Stella")
 with col2:
     if st.session_state.messages:
-        if st.button("🗑 Clear", help="Clear chat history"):
+        if st.button("clear", help="Clear chat history"):
             st.session_state.messages = []
             history.clear()
             st.rerun()
