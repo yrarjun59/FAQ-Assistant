@@ -1,6 +1,5 @@
 import os
 import time
-from urllib import response
 from pathlib import Path
 
 # from langchain_huggingface import HuggingFaceEmbeddings
@@ -10,7 +9,6 @@ from langchain_chroma import Chroma
 
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_classic.chains import create_retrieval_chain
-from langchain_classic.memory import ConversationBufferWindowMemory
 
 # from transformers.utils.logging import set_verbosity_error
 from langchain_core.globals import  set_debug, set_verbose
@@ -19,10 +17,12 @@ from langchain_core.globals import  set_debug, set_verbose
 from prompts import WHIMSICAL_PROMPT , RAG_PROMPT
 
 
+
+# DB_PATH = Path("chroma_db")
 DB_PATH = Path("vector_db")
 
 OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
-ACTIVE_MODEL = "llama3.2:1b"
+ACTIVE_MODEL = os.getenv("LLM_MODEL","llama3.2:1b")
 
 set_debug(False) 
 set_verbose(False)
@@ -104,19 +104,7 @@ class Stella:
                 print(f"Time: {result['time_taken']:.2f}s")
                 print([f"📚 Source: {src}" for src in result.get("sources", [])])
 
-    def test_retrieval(self, query: str):
-        """Test RAG retrieval without LLM."""
-        
-        docs = self.retrieve_docs(query)
-        print(f"\n🔎 Retrieved {len(docs)} docs\n")
-
-        for i, d in enumerate(docs):
-            print(f"--- Doc {i+1} ---")
-            print(d.page_content[:200])
-            print("Metadata:", d.metadata)
-            print()
                     
 if __name__ == "__main__":
     assistant = Stella()
     assistant.run_cli()
-    # assistant.test_retrieval("fuckyou")
