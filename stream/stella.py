@@ -6,6 +6,8 @@ import history
 
 BASE_URL = os.getenv("STELLA_API_URL", "http://backend:8000") + "/chat"
 
+HEALTH_URL = BASE_URL.replace("/chat", "/")
+
 st.set_page_config(page_title="Stella", page_icon="✨")
 
 # ── CSS — loaded from style.css 
@@ -29,17 +31,17 @@ with col2:
 # ── Helper: render sources + time badge
 def show_meta(sources: list, elapsed) -> None:
     if sources:
-        items = "".join(f'<div class="src-item">· {s}</div>' for s in sources)
+        items = "".join(
+                    f'<div class="src-item">· <a href="http://localhost:8000/file/{s}" '
+                    f'target="_blank" style="color:#94a3b8;text-decoration:underline;'
+                    f'text-underline-offset:3px;text-decoration: none;">{s}</a></div>'
+            for s in sources )
         st.markdown(
-            f'<div class="sources-block">'
-            f'<div class="src-title">Sources</div>{items}</div>',
+            f'<div class="sources-block"><div class="src-title">Sources</div>{items}</div>',
             unsafe_allow_html=True,
         )
     if elapsed is not None:
-        st.markdown(
-            f'<span class="time-badge">⏱ {elapsed}s</span>',
-            unsafe_allow_html=True,
-        )
+        st.markdown(f'<span class="time-badge">⏱ {elapsed}s</span>', unsafe_allow_html=True)
 
 # ── Helper: typewriter effect  
 def typewrite(text: str) -> str:
@@ -53,9 +55,35 @@ def typewrite(text: str) -> str:
     placeholder.markdown(displayed)
     return displayed
 
+def wait_for_backend():
+    """Send a dummy POST to /chat to confirm it's ready."""
+    with st.status("⏳ Backend is starting up, please wait...", expanded=False) as s:
+        for attempt in range(30):
+            try:
+                r = requests.post(
+                    BASE_URL,
+                    json={"query": "ping"},   # dummy query
+                    timeout=5,
+                )
+                # any response = /chat is up and reachable
+                # 200, 400, 422, 500 all mean server is ready
+                # only ConnectionError means not ready
+                if r.status_code != 503:
+                    s.update(label="✅ Backend is ready!", state="complete")
+                    return True
+            except requests.exceptions.ConnectionError:
+                pass   # not ready yet
+            except Exception:
+                pass
+            s.update(label=f"⏳ Backend loading… ({attempt * 10}s elapsed)", state="running")
+            time.sleep(10)
+        s.update(label="❌ Backend unavailable.", state="error")
+        return False
+
 # ── Helper: call backend API  
 def call_api(prompt: str) -> tuple:
-    """Returns (answer, sources, elapsed). Answer starts with ⚠ on failure."""
+    if not wait_for_backend():
+        return "⚠ Backend did not become ready in time.", [], None
     try:
         t0 = time.time()
         r  = requests.post(BASE_URL, json={"query": prompt}, timeout=(5, 60))
