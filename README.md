@@ -78,37 +78,6 @@ This will automatically:
 http://localhost:8501
 ```
 
----
-
-## 🐳 Option B — Run Without Source Code (Docker Hub)
-
-Only requires Docker Desktop. No code needed.
-
-### 1. Download the production compose file
-
-Save `compose-prod.yaml` from this repo or copy it from below.
-
-### 2. Start everything
-
-```bash
-docker compose -f compose-prod.yaml up
-```
-
-### 3. Open the app
-
-```
-http://localhost:8501
-```
-
-Then run:
-
-```bash
-docker compose up --build
-```
-
-> The backend will now use your existing Ollama installation instead of spinning up a new container. Make sure your required models are already pulled: `ollama pull llama3.2:1b`
-
----
 
 ## 🔧 Configuration
 
@@ -116,7 +85,7 @@ Copy `.env.example` to `.env` and edit as needed:
 
 ```bash
 # Model selection
-LLM_MODEL=llama3.2:1b           # LLM for answer generation
+LLM_MODEL=llama3.2:1b         
 
 # API URLs (change only if running outside Docker)
 OLLAMA_BASE_URL=http://ollama:11434
@@ -135,26 +104,4 @@ backend/
     ├── doc2
 ```
 
-Then run the ingestion script to embed and index them: make sure documents should be in json format check my samples for larger documets have to chunking
-
-
-```bash
-docker exec backend_api python ingest.py
-```
-
-
-## 🔄 Getting Updates
-
-### From Source (Option A)
-
-```bash
-git pull
-docker compose up --build
-```
-
-### From Docker Hub (Option B)
-
-```bash
-docker compose -f compose-prod.yaml pull
-docker compose -f compose-prod.yaml up
-```
+delete the vector_db folder and only run app and ensure docs are in json format as in mine otherwise not ingesting.....
