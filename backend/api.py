@@ -1,13 +1,22 @@
 
 from ollama_setup import setup
+setup()
+from ingest import Ingestor
+ingestor = Ingestor()
+if not ingestor.run_ingestion():
+        raise RuntimeError("❌ Ingestion failed. Cannot start Stella.")
 
-setup() # make sure ollama model runs before api run
+from main import Stella
+assistant = Stella()
+
+import time
+import os
+import json
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-import time
-from main import Stella
 
 
 app = FastAPI(title="Stella API")
@@ -22,8 +31,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 # ---------------------
-
-assistant = Stella()
 
 # ------------------- DATA MODELS -------------------
 class QueryRequest(BaseModel):
@@ -59,3 +66,22 @@ def chat_endpoint(request: QueryRequest):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
+    
+@app.get("/file/{filename}")
+def file_location(filename: str):
+
+    print(f"{filename} is filename")
+
+    base_dir = "knowledge/FAQS"
+    file_path = os.path.join(base_dir, f"{filename}")
+
+    print("Looking for file at:", os.path.abspath(file_path))
+
+    # check if file exists
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    # return file to browser
+    with open(file_path,"r", encoding="utf-8") as f:
+        data = json.load(f)
+    return JSONResponse(content = data)
