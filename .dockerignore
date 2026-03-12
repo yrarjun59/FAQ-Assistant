@@ -31,3 +31,5 @@ stream/__pycache__
 backend/__pycache__
 
 stream/chat_history.json
+
+backend/knowledge
