@@ -15,7 +15,7 @@ services:
               capabilities: [gpu]
 
   backend:
-    image: yrarjun59/faq-backend:latest    
+    image: yrarjun59/faq-backend:latest
     container_name: backend_api
     working_dir: /app
     volumes:
