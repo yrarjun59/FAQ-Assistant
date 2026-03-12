@@ -105,3 +105,10 @@ backend/
 ```
 
 delete the vector_db folder and only run app and ensure docs are in json format as in mine otherwise not ingesting.....
+
+## 🔄 Getting Updates
+
+```bash
+git pull
+docker compose up --build
+```
