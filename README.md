@@ -1,6 +1,6 @@
 # ✦ Stella — LLM-Powered FAQ Assistant
 
-An AI-powered FAQ assistant that answers questions from your own documents using **Retrieval-Augmented Generation (RAG)**. Ask anything in plain English — Stella searches your knowledge base, retrieves the most relevant context, and generates a grounded answer with cited sources.
+An AI-powered FAQ assistant that answers questions from your local documents using **Retrieval-Augmented Generation (RAG)**. Ask anything in plain English — Stella searches your knowledge base, retrieves the most relevant context, and generates a grounded answer with cited sources.
 
 ---
 
