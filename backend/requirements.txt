@@ -13,11 +13,10 @@ langchain-community
 langchain-ollama
 langchain-huggingface
 
-# Vector Database
-chromadb
+tiktoken
+langchain-text-splitters
 
 # Embeddings
-# sentence-transformers
 fastembed
 
 # Pydantic (FastAPI dependency)
