@@ -1,87 +1,86 @@
-
-from ollama_setup import setup
-setup()
-from ingest import Ingestor
-ingestor = Ingestor()
-if not ingestor.run_ingestion():
-        raise RuntimeError("❌ Ingestion failed. Cannot start Stella.")
-
-from main import Stella
-assistant = Stella()
-
-import time
 import os
 import json
+import time
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, JSONResponse
-from pydantic import BaseModel
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
+from ollama_setup import setup
+from ingest import Ingestor
+from main import Stella
 
+# ── Startup ───────────────────────────────────────────────────────────────────
+setup()
+
+ingestor = Ingestor()
+if not ingestor.run_ingestion():
+    raise RuntimeError("Ingestion failed. Cannot start Stella.")
+
+assistant = Stella()
+
+# ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(title="Stella API")
 
-# --- ADD THIS BLOCK ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    # allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
+    allow_credentials=False,   
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# ---------------------
 
-# ------------------- DATA MODELS -------------------
+# ── Data models ───────────────────────────────────────────────────────────────
 class QueryRequest(BaseModel):
     query: str
 
 class QueryResponse(BaseModel):
     answer: str
     sources: list[str] = []
-    time_taken: float
+    time_taken: float = 0.0
     context_docs: list = []
     error: str | None = None
 
-@app.get("/")
+# ── Routes ────────────────────────────────────────────────────────────────────
+@app.get("/health")
 def health_check():
     return {"status": "online"}
-    
+
 
 @app.post("/chat", response_model=QueryResponse)
 def chat_endpoint(request: QueryRequest):
     user_query = request.query.strip()
-    
-    print(f"Received query: {user_query}")
-
     if not user_query:
         raise HTTPException(status_code=400, detail="Query cannot be empty.")
 
     try:
-        start_time = time.time()
+        start_time = time.perf_counter()
         result = assistant.ask(user_query)
-        result['time_taken'] = time.time() - start_time
-        
+        result["time_taken"] = round(time.perf_counter() - start_time, 2)
         return QueryResponse(**result)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
-    
+
 @app.get("/file/{filename}")
-def file_location(filename: str):
+def get_file(filename: str):
+    base_dir = Path("knowledge/FAQS").resolve()
+    file_path = (base_dir / filename).resolve()
 
-    print(f"{filename} is filename")
+    if not file_path.is_relative_to(base_dir):
+        raise HTTPException(status_code=400, detail="Invalid filename.")
 
-    base_dir = "knowledge/FAQS"
-    file_path = os.path.join(base_dir, f"{filename}")
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail=f"File '{filename}' not found.")
 
-    print("Looking for file at:", os.path.abspath(file_path))
+    if file_path.suffix.lower() != ".json":
+        raise HTTPException(status_code=400, detail="Only JSON files are served.")
 
-    # check if file exists
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="File not found")
+    try:
+        data = json.loads(file_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise HTTPException(status_code=422, detail=f"Invalid JSON: {exc}") from exc
 
-    # return file to browser
-    with open(file_path,"r", encoding="utf-8") as f:
-        data = json.load(f)
-    return JSONResponse(content = data)
+    return JSONResponse(content=data)
