@@ -8,6 +8,54 @@ from langchain_core.documents import Document
 from langchain_chroma import Chroma
 from langchain_community.embeddings import FastEmbedEmbeddings
 
+# for chunking.... 
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from uuid import uuid4
+import tiktoken
+
+
+COLLECTION_NAME     = "faq_collection"
+EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+EMBEDDING_CACHE_DIR = "/app/fastembed_cache"
+DB_PATH = Path("vector_db")
+CSV_DIR = Path("CSV")
+
+
+def check_chunking(content:str,metadata:dict,max_tokens=512)-> List[Document]:
+    enc = tiktoken.get_encoding("cl100k_base")
+    token_count = len(enc.encode(content))
+
+    base_id = str(uuid4())
+
+    if token_count <= max_tokens:
+        return [
+            Document(
+                page_content=content,
+                metadata={**metadata, "chunk_index": 1, "parent_id": base_id},
+                id=f"{base_id}_1"
+            )
+        ]
+    
+    text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+        encoding_name="cl100k_base",
+        chunk_size=450,
+        chunk_overlap=50,
+        separators=["},", "}", "\n\n", "\n", " ", "","question","answer","company","category","faqs"]
+    )
+
+    chunks = text_splitter.split_text(content)
+    chunked_docs = []
+
+    for i, chunk in enumerate(chunks):
+        chunked_docs.append(
+            Document(
+                page_content=chunk,
+                metadata={**metadata, "chunk_index": i + 1, "parent_id": base_id},
+                id=f"{base_id}_{i+1}"
+            )
+        )
+
+    return chunked_docs
 
 class Ingestor:
     """
@@ -17,24 +65,25 @@ class Ingestor:
 
     def __init__(self,
                  knowledge_dir: str = "knowledge/FAQS",
-                 db_path: str = "vector_db",
+                 db_path: str = DB_PATH,
                  csv_dir: str = "CSV",
-                 embedding_model: str = "BAAI/bge-small-en-v1.5",
-                 cache_dir: str = "/app/fastembed_cache"):
+                 embedding_model: str = EMBEDDING_MODEL,
+                 cache_dir: str = EMBEDDING_CACHE_DIR):
         
         self.knowledge_dir = Path(knowledge_dir)
         self.db_path = Path(db_path)
         self.csv_dir = Path(csv_dir)
         self.embedding_model = embedding_model
         self.cache_dir = Path(cache_dir)
-        os.makedirs(self.cache_dir, exist_ok=True)
+        
 
-        # Marker file to indicate ingestion is done
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+
         self.marker_file = self.db_path / ".db_ready"
 
     # -------------------- Document Loading --------------------
     def load_documents(self) -> List[Document]:
-        """Load JSON documents and convert them into Document objects."""
+        """Load JSON documents and convert them into Document objects for chroma"""
         
         if not self.knowledge_dir.is_dir():
              raise FileNotFoundError(f"Directory '{self.knowledge_dir}' not found.")
@@ -42,7 +91,8 @@ class Ingestor:
         print(f"=== STEP 1: loading files from {self.knowledge_dir} exits ????'")
 
         files = [f for f in os.listdir(self.knowledge_dir) if f.endswith(".json")]
-        print(f'len of files : {len(files)}')
+
+        print(f'total number of files : {len(files)}')
         if not files:
             raise FileNotFoundError(f"No JSON files found in '{self.knowledge_dir}'.")
 
@@ -50,31 +100,25 @@ class Ingestor:
 
         for file_name in files:
             file_path = os.path.join(self.knowledge_dir, file_name)
-            print(f'File Path : {file_path}')
             try:
              with open(file_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-
+     
                 company = data.get("company", "Unknown Company")
                 category = data.get("category", "General")
                 last_updated = data.get("last_updated", "N/A")
-            
-                faqs = data.get("faqs", [])
-                        
-                if not isinstance(faqs, list):
-                    print(f"⚠️ Skipping {file_name}: 'faqs' key is not a list.")
-                    continue
 
-                for item in faqs:
+                faqs = data.get("faqs", [])
+
+                for _ ,item in enumerate(faqs):
+
                     if not item or not item.get('question') or not item.get('answer'):
                         continue
 
                     question = item.get('question', '')
                     answer = item.get('answer', '')
 
-                    # --- ENRICH CONTENT ---
-                    # We inject metadata into the text so the AI knows the context
-
+    
                     content = (
                         f"Company: {company}\n"
                         f"Category: {category}\n"
@@ -82,19 +126,18 @@ class Ingestor:
                         f"Answer: {answer}"
                     )
 
-                    # --- CREATE DOCUMENT WITH METADATA ---
-                    # We also save fields as metadata for filtering later
-                    doc = Document(
-                        page_content=content,
-                        metadata={
+                    # We inject metadata into the text so the AI knows the context
+                    metadata={
                             "source": file_name,
                             "company": company,
                             "category": category,
                             "last_updated": last_updated,
-                            "question": question 
+                            "question": question
                         }
-                    )
-                    documents.append(doc)
+
+                    docs = check_chunking(content,metadata)
+                    documents.extend(docs)
+
             except Exception as e:
                 print(f"⚠️ Error reading {file_name}: {e}")
                 raise RuntimeError(f"Failed to read {file_name}: {e}") from e
@@ -105,7 +148,8 @@ class Ingestor:
     def save_to_csv(self, documents: List[Document], csv_name: str = "meta_documents.csv"):
         """Save document metadata to CSV."""
 
-        self.csv_dir.mkdir(parents=True, exist_ok=True)
+        csv_dir = CSV_DIR
+        csv_dir.mkdir(parents=True, exist_ok=True)
         csv_path = self.csv_dir / csv_name
         print(f'csv path: {csv_path}')
         
@@ -121,7 +165,7 @@ class Ingestor:
                         "last_updated": doc.metadata.get("last_updated", ""),
                         "question": doc.metadata.get("question", ""),
                         "answer": doc.page_content.split("Answer: ")[-1],
-                        "content_preview": doc.page_content[:500],
+                        "content_preview": doc.page_content[:200],
                     })
             print(f"💾 CSV saved at {csv_path}")
         except Exception as e:
@@ -132,7 +176,8 @@ class Ingestor:
         """Initialize embedding model."""
         try:
             embeddings =  FastEmbedEmbeddings(
-                model_name=self.embedding_model,
+                collection_name=COLLECTION_NAME,
+                model=self.embedding_model,
                 cache_dir=str(self.cache_dir),
                 model_kwargs={"device":"cpu"},
                 encode_kwargs={"normalize_embeddings": True}
@@ -144,15 +189,18 @@ class Ingestor:
             raise
 
     # -------------------- Vector Store --------------------
-    def create_vector_store(self, documents: List[Document], embeddings) -> Chroma:
+    def create_vector_store(self, chunked_documents: List[Document], embeddings) -> Chroma:
         """Create Chroma vector store from documents."""
         try:
-            vector_store = Chroma.from_documents(
-                documents=documents,
-                embedding=embeddings,
+            print("\n🔍 Sample chunks BEFORE embedding:\n")
+
+            vector_store = Chroma(
+                embedding_function=embeddings,
                 persist_directory=str(self.db_path),
-                collection_name="faq_collection"
+                collection_name=COLLECTION_NAME,
             )
+            vector_store.add_documents(documents=chunked_documents)
+
             print(f"✅ Vector store created at {self.db_path}")
             return vector_store
         except Exception as e:
@@ -163,12 +211,12 @@ class Ingestor:
     def run_ingestion(self) -> bool:
         """Run the complete ingestion pipeline."""
         try:
-            embeddings = self.initialize_embeddings()  # ← initialize ONCE here
+            embeddings = self.initialize_embeddings()  
             if self.marker_file.exists():
                 temp_store = Chroma(
                     persist_directory=str(self.db_path),
                     embedding_function=embeddings,
-                    collection_name="faq_collection"
+                    collection_name=COLLECTION_NAME,
                 )
                 count = temp_store._collection.count()
                 if count > 0:
@@ -178,12 +226,12 @@ class Ingestor:
                     print("⚠️ Marker exists but DB is empty — re-ingesting...")
                     self.marker_file.unlink()
 
-            documents = self.load_documents()
-
-            if documents:
-                self.save_to_csv(documents)
-                self.create_vector_store(documents, embeddings)  # ← reuses same instance
-                self.db_path.mkdir(parents=True, exist_ok=True)
+            # final doucuments contains both chunking and not chunking.....
+            fdocuments = self.load_documents()
+    
+            if fdocuments:
+                self.save_to_csv(fdocuments)
+                self.create_vector_store(fdocuments, embeddings)  
                 self.marker_file.touch()
                 print(f"✅ Ingestion complete. Marker file: {self.marker_file}")
                 return True
