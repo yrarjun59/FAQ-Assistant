@@ -10,4 +10,4 @@ COPY . .
 EXPOSE 8501
 
 
-CMD ["streamlit", "run", "stella.py"]
+CMD ["streamlit", "run", "stella.py", "--server.runOnSave=true"]

@@ -15,31 +15,42 @@ services:
               capabilities: [gpu]
 
   backend:
-    image: yrarjun59/faq-backend:latest
+    build: ./backend
+    # image: yrarjun59/faq-backend:latest
     container_name: backend_api
     working_dir: /app
-    volumes:
-      - ./backend/vector_db:/app/vector_db
-      - ./backend/fastembed_cache:/app/fastembed_cache
-      - ./backend:/app/backend
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
-      - LLM_MODEL=${LLM_MODEL:-llama3.2:1b}
+      - LLM_MODEL=${LLM_MODEL:-phi3:mini}
       - CACHE_DIR=/app/fastembed_cache
     ports:
       - "8000:8000"
     depends_on:
       - ollama
+    volumes:
+      - ./backend/vector_db:/app/vector_db
+      - ./backend/fastembed_cache:/app/fastembed_cache
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 40s
+    develop:
+      watch:
+        - action : sync
+          path: ./backend
+          target: /app
+          ignore:
+            - vector_db/
+            - fastembed_cache/
+            - __pycache__/
+  
 
-  streamlit:
-    image: yrarjun59/faq-frontend:latest 
-    container_name: streamlit_ui
+  stream:
+    build: ./stream
+    # image: yrarjun59/faq-frontend:latest 
+    container_name: stream_ui
     working_dir: /app
     environment:
       - STELLA_API_URL=http://backend:8000
@@ -49,6 +60,14 @@ services:
       - backend
     volumes:
       - ./stream:/app/stream
+    develop:
+      watch:
+        - action: sync
+          path: ./stream
+          target: /app
+          ignore:
+            - __pycache__/
+            - "*.pyc"
 
 volumes:
   ollama_data:

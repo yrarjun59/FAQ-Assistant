@@ -45,17 +45,22 @@ FILE_URL = "http://127.0.0.1:8000"
 
 def show_meta(sources: list, elapsed) -> None:
     if sources:
+        # ✅ remove duplicates while preserving order
+        unique_sources = list(dict.fromkeys(sources))
+
         items = "".join(
             f'<div class="src-item">📚'
-            f'<a href="{FILE_URL}/file/{s}" target="_blank" '  
+            f'<a href="{FILE_URL}/file/{s}" target="_blank" '
             f'style="color:#94a3b8;text-decoration:none;list-style: none;">{s}</a>'
             f'</div>'
-            for s in sources
+            for s in unique_sources
         )
+
         st.markdown(
             f'<div class="sources-block"><div class="src-title">Sources</div>{items}</div>',
             unsafe_allow_html=True,
         )
+
     if elapsed is not None:
         st.markdown(
             f'<span class="time-badge">⏱ {elapsed}s</span>',
