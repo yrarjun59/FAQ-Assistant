@@ -1,7 +1,7 @@
 services:
   ollama:
     image: ollama/ollama:latest
-    container_name: ollama_server
+    container_name: ollama
     ports:
       - "11434:11434"
     volumes:
@@ -21,7 +21,6 @@ services:
     working_dir: /app
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
-      - LLM_MODEL=${LLM_MODEL:-phi3:mini}
       - CACHE_DIR=/app/fastembed_cache
     ports:
       - "8000:8000"
@@ -36,15 +35,15 @@ services:
       timeout: 5s
       retries: 5
       start_period: 40s
-    develop:
-      watch:
-        - action : sync
-          path: ./backend
-          target: /app
-          ignore:
-            - vector_db/
-            - fastembed_cache/
-            - __pycache__/
+    # develop:
+    #   watch:
+    #     - action : sync
+    #       path: ./backend
+    #       target: /app
+    #       ignore:
+    #         - vector_db/
+    #         - fastembed_cache/
+    #         - __pycache__/
   
 
   stream:
@@ -60,14 +59,14 @@ services:
       - backend
     volumes:
       - ./stream:/app/stream
-    develop:
-      watch:
-        - action: sync
-          path: ./stream
-          target: /app
-          ignore:
-            - __pycache__/
-            - "*.pyc"
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./stream
+    #       target: /app
+    #       ignore:
+    #         - __pycache__/
+    #         - "*.pyc"
 
 volumes:
   ollama_data:

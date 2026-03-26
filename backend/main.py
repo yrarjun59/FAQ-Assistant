@@ -13,14 +13,10 @@ from ingest import Ingestor , EMBEDDING_MODEL, EMBEDDING_CACHE_DIR, DB_PATH
 from ollama_setup import setup, OLLAMA_BASE_URL as OLLAMA_URL
 # from memory import create_memory, OllamaWithTokenizer
 
-# use custom LLM
-from dotenv import load_dotenv
-
-load_dotenv()
-
 # load the llm
 LLM_MODEL = "llama3.2:1b"
-# llm = OllamaWithTokenizer(model=LLM_MODEL)
+
+setup()
 
 
 class Stella:
@@ -39,8 +35,7 @@ class Stella:
         print("Initializing RAG chain...")
         start = time.perf_counter()
         
-        model_name = setup(model_name=LLM_MODEL)
-        self._llm = OllamaLLM(model=model_name, base_url = OLLAMA_URL)
+        self._llm = OllamaLLM(model=LLM_MODEL, base_url = OLLAMA_URL)
 
         #create a memory
         # self.memory = create_memory(self._llm)
