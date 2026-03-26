@@ -7,12 +7,12 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from ollama_setup import setup
+# from ollama_setup import setup
 from ingest import Ingestor
 from main import Stella
 
 # ── Startup ───────────────────────────────────────────────────────────────────
-setup()
+# setup()
 
 ingestor = Ingestor()
 if not ingestor.run_ingestion():

@@ -15,9 +15,9 @@ services:
               capabilities: [gpu]
 
   backend:
-    build: ./backend
-    # image: yrarjun59/faq-backend:latest
-    container_name: backend_api
+    # build: ./backend
+    image: yrarjun59/faq-backend:v2
+    container_name: backend
     working_dir: /app
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
@@ -48,9 +48,9 @@ services:
   
 
   stream:
-    build: ./stream
-    # image: yrarjun59/faq-frontend:latest 
-    container_name: stream_ui
+    # build: ./stream
+    image: yrarjun59/faq-frontend:v2 
+    container_name: stream
     working_dir: /app
     environment:
       - STELLA_API_URL=http://backend:8000

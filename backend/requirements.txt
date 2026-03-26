@@ -12,7 +12,7 @@ langchain-chroma
 langchain-community
 langchain-ollama
 langchain-huggingface
-
+# transformers
 tiktoken
 langchain-text-splitters
 

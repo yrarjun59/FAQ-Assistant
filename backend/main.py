@@ -7,9 +7,21 @@ from langchain_chroma import Chroma
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_classic.chains import create_retrieval_chain
 
+
 from prompts import WHIMSICAL_PROMPT, FALLBACK_PROMPT, GUIDE_PROMPT
 from ingest import Ingestor , EMBEDDING_MODEL, EMBEDDING_CACHE_DIR, DB_PATH
-from ollama_setup import OLLAMA_BASE_URL as OLLAMA_URL , LLM_MODEL as ACTIVE_MODEL
+from ollama_setup import setup, OLLAMA_BASE_URL as OLLAMA_URL
+# from memory import create_memory, OllamaWithTokenizer
+
+# use custom LLM
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# load the llm
+LLM_MODEL = "llama3.2:1b"
+# llm = OllamaWithTokenizer(model=LLM_MODEL)
+
 
 class Stella:
     """RAG assistant: ingests documents and answers queries."""
@@ -20,107 +32,107 @@ class Stella:
         self.vector_store = None
         self.fallback_chain = None   # set in _init_rag
         self.guide_chain = None      # set in _init_rag
-        self._init_rag()  
+        self.memory = None  
+        self._init_rag()
         
     def _init_rag(self) -> None:
         print("Initializing RAG chain...")
         start = time.perf_counter()
+        
+        model_name = setup(model_name=LLM_MODEL)
+        self._llm = OllamaLLM(model=model_name, base_url = OLLAMA_URL)
 
-        self._llm = OllamaLLM(model=ACTIVE_MODEL, base_url=OLLAMA_URL)
+        #create a memory
+        # self.memory = create_memory(self._llm)
+
         self.fallback_chain = FALLBACK_PROMPT | self._llm
         self.guide_chain    = GUIDE_PROMPT    | self._llm
 
         # cache embeddings as instance var — reused everywhere
-        self._embeddings = FastEmbedEmbeddings(
-            model_name=EMBEDDING_MODEL,
-            cache_dir=str(EMBEDDING_CACHE_DIR),
-            model_kwargs={"device": "cpu"},
-            encode_kwargs={"normalize_embeddings": True},
-        )
+        embeddings = FastEmbedEmbeddings (model_name=EMBEDDING_MODEL,cache_dir=str(EMBEDDING_CACHE_DIR)
+                            )
         self.vector_store = Chroma(
             persist_directory=str(DB_PATH),
-            embedding_function=self._embeddings,
+            embedding_function=embeddings,
             collection_name="faq_collection",
         )
-
+ 
         print(f"Documents in vector store: {self.vector_store._collection.count()}")
 
-        # combine_chain = create_stuff_documents_chain(llm, WHIMSICAL_PROMPT)
+        retriever = self.vector_store.as_retriever(
+                search_type="similarity",
+                search_kwargs={"k": 3})
 
-        self._combine_chain = create_stuff_documents_chain(self._llm, WHIMSICAL_PROMPT)
+        combine_chain = create_stuff_documents_chain(self._llm, WHIMSICAL_PROMPT)
 
+        self.rag_chain = create_retrieval_chain(retriever, combine_chain)
+
+        # self._combine_chain = create_stuff_documents_chain(self._llm, WHIMSICAL_PROMPT)
         print(f"RAG ready in {time.perf_counter() - start:.2f}s")
+
+        return self.rag_chain
 
 
     def ask(self, query: str) -> dict:
+        """Processes a query using the initialized RAG chain."""
+
+        if not self.rag_chain: self._init_rag()
+
         query = query.strip()
         if not query:
             raise ValueError("Query cannot be empty.")
 
-        start = time.perf_counter()
+        start_time = time.perf_counter()
+        # load memory
+        # memory_vars = self.memory.load_memory_variables({})
 
-        # ── guide trigger ─────────────────────────────────────────
-        guide_triggers = ["what can you do", "what do you know", "help me", "what topics",
-                        "what can i ask", "guide me", "capabilities", "what are you"]
-        
-        if any(t in query.lower() for t in guide_triggers):
-            answer = self.guide_chain.invoke({"input": query})
-            return {
-                "answer": answer,
-                "sources": [],
-                "context_docs": [],
-                "time_taken": round(time.perf_counter() - start, 2),
-            }
-
-        # ── single Chroma call — reuse results for both filter + LLM ─
-        raw = self.vector_store.similarity_search_with_score(query, k=3)
-        best_score = max((1.0 - dist for _, dist in raw), default=0.0)
-
-        if best_score < 0.5:
-            answer = self.fallback_chain.invoke({"input": query})
-            return {
-                "answer": answer,
-                "sources": [],
-                "context_docs": [],
-                "time_taken": round(time.perf_counter() - start, 2),
-            }
+        try:
+            # call rag chain with memory injected
+            response = self.rag_chain.invoke({"input": query,})
+            
+            # "chat_history": memory_vars["chat_history"]
     
+            # Single fetch with fallback — no duplicate
+            context_docs = response.get("context", response.get("source_documents", []))
+            
+            # answer = response.get('answer')
+            answer = response['answer']
+            context_serialized = [{"content": d.page_content, "metadata": d.metadata} for d in context_docs]
+            sources = [d.metadata["source"] for d in context_docs if d.metadata.get("source")]
 
-        # ── pass already-fetched docs directly to LLM ────────────
-        context_docs = [doc for doc, _ in raw]
-        answer = self._combine_chain.invoke({
-            "input":   query,
-            "context": context_docs,
-        })
+            # save interaction
+            # self.memory.save_context(
+            #     {"input": query},
+            #     {"output": answer}
+            #     )
 
-        sources = [d.metadata["source"] for d in context_docs if d.metadata.get("source")]
-        context_serialized = [
-            {"content": d.page_content, "metadata": d.metadata}
-            for d in context_docs
-        ]
-
-        return {
-            "answer": answer,
-            "sources": sources,
-            "context_docs": context_serialized,
-            "time_taken": round(time.perf_counter() - start, 2),
-        }
+            return {
+                "answer": answer,
+                "sources": sources,
+                "context_docs": context_serialized,
+                "time_taken": round(time.perf_counter() - start_time, 2),
+            }
+        except Exception as e:
+            return {"error": str(e)}
 
     def run_cli(self) -> None:
         print("Chat is live! Type 'exit' to quit.\n")
         while True:
-            user_query = input("You: ").strip()
+            user_query = input("👨‍🚀 You: ").strip()
+            try:
+                result = self.ask(user_query)
+
+                answer = result.get('answer')
+                print(f"🤖 Stella: {answer}")
+                print(f"Time: {result['time_taken']:.2f}s")
+                print([f"📚 Source: {src}" for src in result.get("sources", [])])
+            except Exception as exc:
+                print(f"Error: {exc}")
+
             if user_query.lower() == "exit":
                 print("Goodbye!")
                 break
-            try:
-                result = self.ask(user_query)
-                print(f"Stella: {result['answer']}")
-                print(f"Time: {result['time_taken']:.2f}s")
-                for src in result.get("sources", []):
-                    print(f"  Source: {src}")
-            except Exception as exc:
-                print(f"Error: {exc}")
+
 
 if __name__ == "__main__":
     assistant = Stella()

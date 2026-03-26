@@ -21,41 +21,51 @@ DB_PATH = Path("vector_db")
 CSV_DIR = Path("CSV")
 
 
-def check_chunking(content:str,metadata:dict,max_tokens=512)-> List[Document]:
+def check_chunking(content:str,metadata:dict,max_tokens:int=512)-> List[Document]:
     enc = tiktoken.get_encoding("cl100k_base")
     token_count = len(enc.encode(content))
-
     base_id = str(uuid4())
 
     if token_count <= max_tokens:
         return [
             Document(
                 page_content=content,
-                metadata={**metadata, "chunk_index": 1, "parent_id": base_id},
+                metadata={**metadata, "chunk_index": 1, "total_chunks": 1, "parent_id": base_id},
                 id=f"{base_id}_1"
             )
         ]
     
-    text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+     # header = Company + Category + Question lines (always repeat in every chunk)
+    lines = content.split("\n")
+    header_lines = [l for l in lines if l.startswith(("Company:", "Category:", "Question:"))]
+    header = "\n".join(header_lines)  # this gets prepended to every chunk
+
+    answer_part = content.split("Answer: ", 1)[-1]
+
+    # budget: how many tokens left for answer after header
+    header_tokens = len(enc.encode(header + "\nAnswer: "))
+    answer_budget = 450 - header_tokens   # leave room for header
+
+
+    splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
         encoding_name="cl100k_base",
-        chunk_size=450,
-        chunk_overlap=50,
-        separators=["},", "}", "\n\n", "\n", " ", "","question","answer","company","category","faqs"]
+        chunk_size=answer_budget,
+        chunk_overlap=40,
+        separators=["\n\n", "\n", ". ", " ", ""],
     )
 
-    chunks = text_splitter.split_text(content)
-    chunked_docs = []
+    answer_chunks = splitter.split_text(answer_part)
+    base_id       = str(uuid4())
+    total         = len(answer_chunks)
 
-    for i, chunk in enumerate(chunks):
-        chunked_docs.append(
-            Document(
-                page_content=chunk,
-                metadata={**metadata, "chunk_index": i + 1, "parent_id": base_id},
-                id=f"{base_id}_{i+1}"
-            )
+    return [
+        Document(
+            page_content=f"{header}\nAnswer: {chunk}",
+            metadata={**metadata, "chunk_index": i + 1, "total_chunks": total, "parent_id": base_id},
+            id=f"{base_id}_{i + 1}"
         )
-
-    return chunked_docs
+        for i, chunk in enumerate(answer_chunks)
+    ]
 
 class Ingestor:
     """
@@ -134,15 +144,16 @@ class Ingestor:
                             "last_updated": last_updated,
                             "question": question
                         }
-
+                    
                     docs = check_chunking(content,metadata)
                     documents.extend(docs)
 
             except Exception as e:
                 print(f"⚠️ Error reading {file_name}: {e}")
                 raise RuntimeError(f"Failed to read {file_name}: {e}") from e
+            
         print(f"✅ Successfully loaded {len(documents)} documents from {len(files)} files.")
-        return documents
+        return documents    
 
     # -------------------- CSV Saving --------------------
     def save_to_csv(self, documents: List[Document], csv_name: str = "meta_documents.csv"):
@@ -228,6 +239,21 @@ class Ingestor:
 
             # final doucuments contains both chunking and not chunking.....
             fdocuments = self.load_documents()
+
+            enc = tiktoken.get_encoding("cl100k_base")
+
+            over, under = 0, 0
+            for doc in fdocuments:
+                tokens = len(enc.encode(doc.page_content))
+                if tokens > 512:
+                    over += 1
+                    print(f"OVER  {tokens:4d} tokens | {doc.metadata.get('question','')[:60]}")
+                else:
+                    under += 1
+
+            print(f"\nunder 512: {under} | over 512: {over}")
+
+            # print([i for i in fdocuments])
     
             if fdocuments:
                 self.save_to_csv(fdocuments)
