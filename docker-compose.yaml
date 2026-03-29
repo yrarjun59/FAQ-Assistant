@@ -21,8 +21,8 @@ services:
       start_period: 10s
 
   backend:
-    build: ./backend
-    # image: yrarjun59/faq-backend:v2
+    # build: ./backend
+    image: yrarjun59/faq-backend:v2
     container_name: backend
     working_dir: /app
     environment:
@@ -55,8 +55,8 @@ services:
   
 
   stream:
-    build: ./stream
-    # image: yrarjun59/faq-frontend:v2 
+    # build: ./stream
+    image: yrarjun59/faq-frontend:v2 
     container_name: stream
     working_dir: /app
     environment:
