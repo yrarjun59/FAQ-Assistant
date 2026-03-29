@@ -13,4 +13,5 @@ COPY . .
 EXPOSE 8000
 
 
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["sh", "-c", "python ollama_setup.py && uvicorn api:app --host 0.0.0.0 --port 8000 --reload"]

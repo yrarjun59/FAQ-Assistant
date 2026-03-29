@@ -13,28 +13,36 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   backend:
-    # build: ./backend
-    image: yrarjun59/faq-backend:v2
+    build: ./backend
+    # image: yrarjun59/faq-backend:v2
     container_name: backend
     working_dir: /app
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - CACHE_DIR=/app/fastembed_cache
+      - LLM_MODEL=${LLM_MODEL:-llama3.2:1b}
     ports:
       - "8000:8000"
     depends_on:
-      - ollama
+      ollama:
+        condition: service_healthy
     volumes:
       - ./backend/vector_db:/app/vector_db
       - ./backend/fastembed_cache:/app/fastembed_cache
     healthcheck:
-      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 40s
+      start_period: 60s
     # develop:
     #   watch:
     #     - action : sync
@@ -47,8 +55,8 @@ services:
   
 
   stream:
-    # build: ./stream
-    image: yrarjun59/faq-frontend:v2 
+    build: ./stream
+    # image: yrarjun59/faq-frontend:v2 
     container_name: stream
     working_dir: /app
     environment:
@@ -56,7 +64,8 @@ services:
     ports:
       - "8501:8501"
     depends_on:
-      - backend
+        backend:
+          condition: service_healthy
     volumes:
       - ./stream:/app/stream
     # develop:

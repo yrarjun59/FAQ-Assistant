@@ -10,11 +10,10 @@ from langchain_classic.chains import create_retrieval_chain
 
 from prompts import WHIMSICAL_PROMPT, FALLBACK_PROMPT, GUIDE_PROMPT
 from ingest import Ingestor , EMBEDDING_MODEL, EMBEDDING_CACHE_DIR, DB_PATH
-from ollama_setup import setup, OLLAMA_BASE_URL as OLLAMA_URL
+from ollama_setup import setup, OLLAMA_BASE_URL as OLLAMA_URL, LLM_MODEL
 # from memory import create_memory, OllamaWithTokenizer
 
-# load the llm
-LLM_MODEL = "llama3.2:1b"
+
 
 setup()
 

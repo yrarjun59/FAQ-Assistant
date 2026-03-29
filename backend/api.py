@@ -12,7 +12,6 @@ from ingest import Ingestor
 from main import Stella
 
 # ── Startup ───────────────────────────────────────────────────────────────────
-LLM_MODEL = "llama3.2:1b"
 setup()
 
 ingestor = Ingestor()

@@ -31,17 +31,27 @@ def is_model_present(model_name: str) -> bool:
 
 
 def pull_model(model_name: str) -> None:
+
+    # resp = session.get(f"{OLLAMA_BASE_URL}/api/tags", timeout=5)
+    # resp.raise_for_status()
+    # local = [m["name"] for m in resp.json().get("models", [])]
+    
+    # print(f"Looking for: '{model_name}'")
+    # print(f"Local models: {local}")
+
+    
     if is_model_present(model_name):
         print(f"✅ Model already present: {model_name}")
         return
 
-    print(f"⬇ Downloading {model_name} — please wait...")
+    print(f"⬇️  Downloading {model_name} — please wait...")
     resp = session.post(
         f"{OLLAMA_BASE_URL}/api/pull",
-        json={"name": model_name, "stream": False}, 
+        json={"name": model_name, "stream": False},
         timeout=600,
     )
     resp.raise_for_status()
+    print(f"✅ Model ready: {model_name}")
 
     if not is_model_present(model_name):
         raise RuntimeError(f"Pull failed: {model_name} not found after download.")
@@ -52,3 +62,6 @@ def pull_model(model_name: str) -> None:
 def setup() -> None:
     wait_for_ollama()
     pull_model(LLM_MODEL)
+
+if __name__ == "__main__":
+    setup()
